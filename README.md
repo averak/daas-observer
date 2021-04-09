@@ -1,4 +1,9 @@
-# Observer
+# DaaS Observer
+
+![code check](https://github.com/averak/daas-observer/workflows/code%20check/badge.svg)
+![deploy](https://github.com/averak/daas-observer/workflows/deploy/badge.svg)
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
+[![Twitter](https://img.shields.io/badge/Twitter-%40rits_dajare-blue?style=flat-square&logo=twitter)](https://twitter.com/rits_dajare)
 
 This app is intermediate server of the dajare judgement service.
 
