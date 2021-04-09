@@ -6,9 +6,11 @@
   "author": "averak <abe12@mccc.jp>",
   "license": "MIT",
 	"scripts": {
+		"build": "tsc",
+		"deploy": "clasp push && clasp deploy",
 		"check": "npm-run-all check:*",
 		"check:type": "tsc",
-		"check:format": "prettier --check src",
+		"check:format": "prettier --write src",
 		"check:lint": "yarn eslint src"
 	},
   "dependencies": {
