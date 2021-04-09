@@ -5,9 +5,11 @@
   "repository": "https://github.com/averak/daas-observer",
   "author": "averak <abe12@mccc.jp>",
   "license": "MIT",
+	"deploy_id": "AKfycbyGcadZxHESuntCW3dq8C7hw2smViRZGUu2zj3jR9n28Sk2tBTO1sTqQPnVoK-rOGxrHQ",
 	"scripts": {
+		"publish": "yarn run build && yarn run deploy",
 		"build": "tsc",
-		"deploy": "clasp push && clasp deploy",
+		"deploy": "clasp push -f && clasp deploy -i $npm_package_deploy_id",
 		"check": "npm-run-all check:*",
 		"check:type": "tsc",
 		"check:format": "prettier --write src",
