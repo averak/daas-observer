@@ -13,7 +13,7 @@
 		"check": "npm-run-all check:*",
 		"check:type": "tsc",
 		"check:format": "prettier --write src",
-		"check:lint": "yarn eslint src"
+		"check:lint": "eslint src"
 	},
   "dependencies": {
     "@google/clasp": "^2.3.0",
