@@ -1,7 +1,7 @@
-import { doGet } from './api';
+import * as api from './api';
 
 declare const global: {
   [x: string]: any;
 };
 
-global.doGet = doGet;
+global.doGet = api.doGet;
