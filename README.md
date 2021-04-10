@@ -1,5 +1,6 @@
 # DaaS Observer
 
+![test](https://github.com/averak/daas-observer/workflows/test/badge.svg)
 ![code check](https://github.com/averak/daas-observer/workflows/code%20check/badge.svg)
 ![deploy](https://github.com/averak/daas-observer/workflows/deploy/badge.svg)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
