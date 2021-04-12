@@ -1,4 +1,4 @@
-class Dajare {
+export class Dajare {
   text: string;
   reading: string;
   isDajare: boolean;
@@ -17,5 +17,3 @@ class Dajare {
     this.author = '';
   }
 }
-
-export default Dajare;

@@ -1,2 +1,2 @@
-export { default as Dajare } from './dajare';
-export { default as DajareRepository } from './dajare_repository';
+export { Dajare } from './dajare';
+export { DajareRepository } from './dajare_repository';

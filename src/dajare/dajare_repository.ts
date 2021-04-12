@@ -1,6 +1,6 @@
-import { default as Dajare } from './dajare';
+import { Dajare } from './dajare';
 
-class DajareRepository {
+export class DajareRepository {
   constructor() {
     return;
   }
@@ -9,5 +9,3 @@ class DajareRepository {
     return;
   }
 }
-
-export default DajareRepository;
