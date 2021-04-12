@@ -1,11 +1,13 @@
 import { Dajare } from './dajare';
 
 export class DajareRepository {
+  sheet;
+
   constructor() {
-    return;
+    this.sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('dajare');
   }
 
   public store(dajare: Dajare): void {
-    return;
+    this.sheet?.appendRow([dajare.text, dajare.score]);
   }
 }
