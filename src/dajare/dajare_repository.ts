@@ -1,4 +1,4 @@
-import { Dajare } from './dajare';
+import { Dajare, DajareService } from './';
 
 export class DajareRepository {
   sheet;
@@ -8,6 +8,6 @@ export class DajareRepository {
   }
 
   public store(dajare: Dajare): void {
-    this.sheet?.appendRow([dajare.text, dajare.score]);
+    this.sheet?.appendRow(DajareService.toArray(dajare));
   }
 }

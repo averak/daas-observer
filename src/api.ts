@@ -1,18 +1,23 @@
 import * as config from './config';
+import { Dajare, DajareRepository } from './dajare';
 
 export function doGet(): GoogleAppsScript.Content.TextOutput {
-  const dajare = '布団が吹っ飛んだ';
+  const dajareText = '布団が吹っ飛んだ';
   const resData = JSON.stringify({
-    is_dajare: judgeDajare(dajare)['is_dajare'],
-    dajare: dajare,
-    reading: getReading(dajare)['reading'],
-    score: evalDajare(dajare)['score'],
+    is_dajare: judgeDajare(dajareText)['is_dajare'],
+    dajare: dajareText,
+    reading: getReading(dajareText)['reading'],
+    score: evalDajare(dajareText)['score'],
   });
 
   ContentService.createTextOutput();
   const output = ContentService.createTextOutput();
   output.setMimeType(ContentService.MimeType.JSON);
   output.setContent(resData);
+
+  const dajare: Dajare = new Dajare(dajareText);
+  const dajareRepo: DajareRepository = new DajareRepository();
+  dajareRepo.store(dajare);
 
   return output;
 }
