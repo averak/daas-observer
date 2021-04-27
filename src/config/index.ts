@@ -4,3 +4,9 @@ export {
   evalResponse,
   readingResponse,
 } from "./DajareConfig";
+export {
+  DAJARE_SHEET_NAME,
+  GRADE_SHEET_NAME,
+  RANKING_SHEET_NAME,
+  PERSONAL_CONFIG_SHEET_NAME,
+} from "./SheetConfig";
