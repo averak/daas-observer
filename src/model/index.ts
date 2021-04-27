@@ -1,0 +1,1 @@
+export { DajareModel } from "./DajareModel";
