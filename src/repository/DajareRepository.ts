@@ -1,15 +1,14 @@
 import { DajareModel } from "../model";
 import { DAJARE_SHEET_NAME } from "../config";
 
-export class DajareRepository {
-  private sheet;
+import { AbstractRepository } from "./AbstractRepository";
 
-  constructor() {
-    const sheetApp = SpreadsheetApp.getActive();
-    this.sheet = sheetApp.getSheetByName(DAJARE_SHEET_NAME);
+export class DajareRepository extends AbstractRepository {
+  onInit(): void {
+    this.loadSheet(DAJARE_SHEET_NAME);
   }
 
-  public store(dajare: DajareModel): void {
+  store(dajare: DajareModel): void {
     this.sheet?.appendRow([
       new Date(),
       dajare.getText(),
