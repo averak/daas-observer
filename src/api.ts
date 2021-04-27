@@ -1,13 +1,13 @@
-import * as config from './config';
-import { Dajare, DajareRepository } from './dajare';
+import * as config from "./config";
+import { Dajare, DajareRepository } from "./dajare";
 
 export function doGet(): GoogleAppsScript.Content.TextOutput {
-  const dajareText = '布団が吹っ飛んだ';
+  const dajareText = "布団が吹っ飛んだ";
   const resData = JSON.stringify({
-    is_dajare: judgeDajare(dajareText)['is_dajare'],
+    is_dajare: judgeDajare(dajareText)["is_dajare"],
     dajare: dajareText,
-    reading: getReading(dajareText)['reading'],
-    score: evalDajare(dajareText)['score'],
+    reading: getReading(dajareText)["reading"],
+    score: evalDajare(dajareText)["score"],
   });
 
   ContentService.createTextOutput();

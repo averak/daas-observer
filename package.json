@@ -12,8 +12,9 @@
     "build": "webpack",
     "deploy": "clasp push -f && clasp deploy -i $npm_package_deploy_id",
     "check": "npm-run-all check:*",
-    "check:format": "prettier --write src",
-    "check:lint": "eslint src"
+    "check:format": "prettier --check .",
+    "check:lint": "eslint src",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@google/clasp": "^2.3.0",

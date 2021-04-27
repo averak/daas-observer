@@ -1,4 +1,4 @@
-import { Dajare } from './';
+import { Dajare } from "./";
 
 export class DajareService {
   public static toArray(

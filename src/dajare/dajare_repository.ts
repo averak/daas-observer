@@ -1,10 +1,10 @@
-import { Dajare, DajareService } from './';
+import { Dajare, DajareService } from "./";
 
 export class DajareRepository {
   sheet;
 
   constructor() {
-    this.sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('dajare');
+    this.sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("dajare");
   }
 
   public store(dajare: Dajare): void {

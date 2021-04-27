@@ -1,5 +1,5 @@
-import * as api from '../src/api';
+import * as api from "../src/api";
 
-test('api doGet test', () => {
-  expect(api).toHaveProperty('doGet');
+test("api doGet test", () => {
+  expect(api).toHaveProperty("doGet");
 });

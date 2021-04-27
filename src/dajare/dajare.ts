@@ -9,11 +9,11 @@ export class Dajare {
 
   constructor(text: string) {
     this.text = text;
-    this.reading = '';
+    this.reading = "";
     this.isDajare = false;
     this.score = 0.0;
     this.sensitiveTags = [];
     this.isSensitive = false;
-    this.author = '';
+    this.author = "";
   }
 }
