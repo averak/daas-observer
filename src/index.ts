@@ -11,7 +11,6 @@ global.doGet = (): GoogleAppsScript.Content.TextOutput => {
   // create test object
   const dajareText = "布団が吹っ飛んだ";
   let dajare = new DajareModel(dajareText);
-  dajare.setScore(3.0);
   dajare.setAuthor("山田 太郎");
 
   const dajareClient = new DajareClient();
@@ -19,6 +18,8 @@ global.doGet = (): GoogleAppsScript.Content.TextOutput => {
 
   // judge
   dajare = dajareClient.judgeDajare(dajare);
+  // eval
+  dajare = dajareClient.evalDajare(dajare);
 
   dajareRepository.store(dajare);
 
