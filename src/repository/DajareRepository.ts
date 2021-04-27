@@ -10,8 +10,8 @@ export class DajareRepository {
 
   public store(dajare: DajareModel): void {
     this.sheet?.appendRow([
+			new Date(),
       dajare.getText(),
-      dajare.getReading(),
       dajare.getScore(),
       dajare.getIsDajare(),
       dajare.getAuthor(),
