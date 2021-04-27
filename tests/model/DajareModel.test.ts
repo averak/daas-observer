@@ -1,8 +1,8 @@
-import { DajareModel } from '../../src/model';
+import { DajareModel } from "../../src/model";
 
-const dajareText = '布団が吹っ飛んだ';
-const dajare: DajareModel = new DajareModel(dajareText);
+const dajareText = "布団が吹っ飛んだ";
+const dajare = new DajareModel(dajareText);
 
-test('DajareModelのプロパティをテスト', () => {
+test("DajareModelのプロパティをテスト", () => {
   expect(dajare.getText()).toBe(dajareText);
 });

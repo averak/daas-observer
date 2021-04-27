@@ -1,0 +1,1 @@
+export { DajareRepository } from "./DajareRepository";
