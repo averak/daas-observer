@@ -10,11 +10,33 @@ This app is intermediate server of the dajare judgement service.
 
 It runs on Google spreadsheets and is responsible for storing data and posting to Twitter.
 
-## Installing
+## Develop
+
+### Requirements
+
+- Google Apps Script
+- yarn
+
+### Installing
+
+Clone this repository.
+
+Then, install dependencies with yarn.
 
 ```sh
-$ git clone <this repo>
-$ cd <this repo>
-
 $ yarn
 ```
+
+### Commands
+
+See `scripts` section of [package.json](./package.json)
+
+- `yarn run publish` - build and deploy
+- `yarn run test` - run test
+- `yarn run check` - code check
+
+## References
+
+- [立命館ダジャレサークル](https://rits-dajare.github.io/)
+- [DaaS(Dajare as a Service)](https://github.com/rits-dajare/DaaS)
+- [ダジャレ管理シート](https://docs.google.com/spreadsheets/d/16QeSzLD790hsDSm-lQaNBxa7f2_-BmFi8SLawqkRO2o/edit#gid=0)
