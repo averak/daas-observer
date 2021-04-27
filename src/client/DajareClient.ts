@@ -16,6 +16,7 @@ export class DajareClient {
         `https://api.abelab.dev/daas/judge/?dajare=${dajare.getText()}`
       );
     } catch (e) {
+      dajare.setIsDajare(false);
       return dajare;
     }
 
