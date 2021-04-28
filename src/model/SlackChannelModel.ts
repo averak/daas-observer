@@ -37,4 +37,8 @@ export class SlackChannelModel {
   getWebhookURL(): string {
     return this.webhookURL;
   }
+
+  getPostable(): boolean {
+    return !(this.getWebhookURL() == undefined || this.getWebhookURL() == "");
+  }
 }

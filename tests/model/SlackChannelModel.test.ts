@@ -11,5 +11,6 @@ slackChannel.setWebhookURL(channelWebhookURL);
 test("SlackChannelModelのプロパティをテスト", () => {
   expect(slackChannel.getID()).toBe(channelID);
   expect(slackChannel.getName()).toBe(channelName);
+  expect(slackChannel.getPostable()).toBe(true);
   expect(slackChannel.getWebhookURL()).toBe(channelWebhookURL);
 });
