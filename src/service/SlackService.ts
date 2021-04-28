@@ -51,5 +51,7 @@ export class SlackService {
     dajare = this.dajareService.fetchInfo(dajare);
     const slackPreviewMessage = this.messageService.makeSlackPreview(dajare);
     this.postMessage("twitter", slackPreviewMessage);
+    // store in sheet
+    this.dajareService.store(dajare);
   }
 }
