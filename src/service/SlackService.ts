@@ -2,6 +2,12 @@ import { DajareModel, SlackChannelModel, AuthorModel } from "../model";
 import { SlackChannelRepository } from "../repository";
 import { SlackClient } from "../client";
 import { DajareService, MessageService, AuthorService } from "../service";
+import {
+  DAAS_CHANNEL_NAME,
+  TEST_CHANNEL_NAME,
+  PREVIEW_CHANNEL_NAME,
+} from "../config";
+import { LogUtil } from "../util";
 
 export class SlackService {
   private slackClient: SlackClient;
@@ -25,9 +31,11 @@ export class SlackService {
 
     // return if cannot post
     if (channel == undefined) {
+      LogUtil.logging(`ERRRO: cannot find #${channelName}`);
       return;
     }
     if (!channel.getPostable()) {
+      LogUtil.logging(`ERRRO: cannot post #${channelName}`);
       return;
     }
 
@@ -46,6 +54,7 @@ export class SlackService {
     // set author
     const author: AuthorModel | undefined = this.authorService.findById(userId);
     if (author == undefined) {
+      LogUtil.logging("ERROR: cannot find author");
       return;
     } else {
       dajare.setAuthor(author);
@@ -56,8 +65,8 @@ export class SlackService {
       return;
     }
     if (
-      channel.getName() != "personal:daas" &&
-      channel.getName() != "personal:bottest"
+      channel.getName() != DAAS_CHANNEL_NAME &&
+      channel.getName() != TEST_CHANNEL_NAME
     ) {
       return;
     }
@@ -73,7 +82,7 @@ export class SlackService {
 
     // post message
     const slackPreviewMessage = this.messageService.makeSlackPreview(dajare);
-    this.postMessage("personal:twitter", slackPreviewMessage);
+    this.postMessage(PREVIEW_CHANNEL_NAME, slackPreviewMessage);
 
     // store in sheet
     this.dajareService.store(dajare);

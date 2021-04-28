@@ -1,5 +1,6 @@
 import { AuthorModel } from "../model";
 import { TokenService } from "../service";
+import { LogUtil } from "../util";
 
 interface postParams {
   ok: boolean;
@@ -36,6 +37,7 @@ export class AuthorRepository {
         },
       });
     } catch (e) {
+      LogUtil.logging("ERROR: ユーザ一覧の取得に失敗");
       return result;
     }
 
