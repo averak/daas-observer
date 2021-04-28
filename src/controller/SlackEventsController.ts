@@ -14,10 +14,11 @@ interface postParams {
 
 export class SlackEventsController {
   private slackService: SlackService;
-  private lastEventID!: string;
+  private eventIdList: string[];
 
   constructor() {
     this.slackService = new SlackService();
+    this.eventIdList = [];
   }
 
   receiveEvent(
@@ -28,10 +29,14 @@ export class SlackEventsController {
     ) as postParams;
 
     // ignore received request
-    if (params.event_id == this.lastEventID) {
+    if (this.eventIdList.includes(params.event_id)) {
       return ContentService.createTextOutput("this event is already received");
     }
-    this.lastEventID = params.event_id;
+    // cache event id
+    this.eventIdList.push(params.event_id);
+    if (this.eventIdList.length > 10) {
+      this.eventIdList.shift();
+    }
 
     switch (params.type) {
       // Slack Events API verification
