@@ -34,7 +34,7 @@ export class MessageService {
   }
 
   makeRankingTweet(dajare: DajareModel): string {
-    let result = this.JUDGE_TWEET;
+    let result = this.RANKING_TWEET;
     const intScore = Math.round(dajare.getScore());
 
     result = result.replace("${timestamp}", new Date().toISOString());
@@ -50,7 +50,7 @@ export class MessageService {
   }
 
   makeSlackPreview(dajare: DajareModel): string {
-    let result = this.JUDGE_TWEET;
+    let result = this.SLACK_PREVIEW;
     const intScore = Math.round(dajare.getScore());
 
     result = result.replace("${timestamp}", new Date().toISOString());
