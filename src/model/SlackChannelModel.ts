@@ -4,16 +4,16 @@ export class SlackChannelModel {
   private webhookURL!: string;
 
   constructor(id: string) {
-    this.setID(id);
+    this.setId(id);
   }
 
-  setID(id: string): void {
+  setId(id: string): void {
     if (id.length > 0) {
       this.id = id;
     }
   }
 
-  getID(): string {
+  getId(): string {
     return this.id;
   }
 

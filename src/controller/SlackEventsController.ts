@@ -47,6 +47,7 @@ export class SlackEventsController {
       case "event_callback":
         this.slackService.receiveMessage(
           params.event.channel,
+          params.event.user,
           params.event.text
         );
         break;

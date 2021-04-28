@@ -8,13 +8,13 @@ export class SlackChannelRepository extends AbstractRepository {
     this.loadSheet(CHANNEL_SHEET_NAME);
   }
 
-  findByID(id: string): SlackChannelModel | undefined {
+  findById(id: string): SlackChannelModel | undefined {
     let result: SlackChannelModel | undefined;
     const channels = this.findAll();
 
     // find by id
     for (let i = 0; i < channels.length; i++) {
-      if (id == channels[i].getID()) {
+      if (id == channels[i].getId()) {
         result = channels[i];
       }
     }
