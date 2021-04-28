@@ -1,6 +1,7 @@
 import { DajareModel } from "./model";
-import { DajareClient, SlackClient } from "./client";
-import { DajareRepository, SlackChannelRepository } from "./repository";
+import { DajareClient } from "./client";
+import { DajareRepository } from "./repository";
+import { SlackService } from "./service";
 
 declare const global: {
   [x: string]: any;
@@ -13,9 +14,8 @@ global.doGet = (): GoogleAppsScript.Content.TextOutput => {
   dajare.setAuthor("山田 太郎");
 
   const dajareClient = new DajareClient();
-  const slackClient = new SlackClient();
   const dajareRepository = new DajareRepository();
-  const slackChannelRepository = new SlackChannelRepository();
+  const slackService = new SlackService();
 
   // judge
   dajare = dajareClient.judgeDajare(dajare);
@@ -26,10 +26,9 @@ global.doGet = (): GoogleAppsScript.Content.TextOutput => {
   dajareRepository.store(dajare);
 
   // post message
-  const slackChannel = slackChannelRepository.findByName("daas");
-  if (slackChannel != undefined) {
-    slackClient.postMessage(slackChannel, "こんにちは");
-  }
+  slackService.postMessage("daas", "daasへの投稿テストです");
+  slackService.postMessage("bottest", "bottestへの投稿テストです");
+  slackService.postMessage("not_exist", "投稿されません");
 
   // make response
   ContentService.createTextOutput();
@@ -39,8 +38,9 @@ global.doGet = (): GoogleAppsScript.Content.TextOutput => {
   return result;
 };
 
+/*
 global.doPost = (e: any) => {
-  const slackClient = new SlackClient();
+  const slackService = new SlackService();
   const params: any = JSON.parse(e.postData);
 
   // Slack Events API認証用
@@ -48,3 +48,4 @@ global.doPost = (e: any) => {
     return ContentService.createTextOutput(params.challenge);
   }
 };
+*/
