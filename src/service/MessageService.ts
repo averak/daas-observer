@@ -60,6 +60,7 @@ export class MessageService {
       "${dajare_star}",
       `${"★".repeat(intScore)}${"☆".repeat(5 - intScore)}`
     );
+    result = result.replace("${dajare_score}", dajare.getScore().toFixed(2));
 
     return result;
   }
