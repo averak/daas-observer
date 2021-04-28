@@ -12,7 +12,6 @@ export {
   POST_CONFIG_SHEET_NAME,
   CHANNEL_SHEET_NAME,
   TOKEN_SHEET_NAME,
-  LOG_SHEET_NAME,
 } from "./SheetConfig";
 export {
   DAAS_CHANNEL_NAME,

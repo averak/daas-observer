@@ -1,1 +1,1 @@
-export { LogUtil } from "./LogUtil";
+export { SlackUtil } from "./SlackUtil";
