@@ -27,4 +27,21 @@ export class SlackService {
     // post
     this.slackClient.postMessage(channel, message);
   }
+
+  receiveMessage(channelID: string, message: string): void {
+    const channel:
+      | SlackChannelModel
+      | undefined = this.slackChannelRepository.findByID(channelID);
+
+    // catch only posts on #daas / #bottest
+    if (channel == undefined) {
+      return;
+    }
+    if (channel.getName() != "daas" && channel.getName() != "bottest") {
+      return;
+    }
+
+    // post
+    this.postMessage("twitter", `「${message}」を受信`);
+  }
 }

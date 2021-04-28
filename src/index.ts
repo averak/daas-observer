@@ -38,14 +38,29 @@ global.doGet = (): GoogleAppsScript.Content.TextOutput => {
   return result;
 };
 
-/*
-global.doPost = (e: any) => {
-  const slackService = new SlackService();
-  const params: any = JSON.parse(e.postData);
+interface postData {
+  type: string;
+  challenge: string;
+  event: {
+    type: string;
+    channel: string;
+    user: string;
+    text: string;
+  };
+}
 
-  // Slack Events API認証用
-  if (params.type == "url_verification") {
-    return ContentService.createTextOutput(params.challenge);
+global.doPost = (event: GoogleAppsScript.Events.DoPost) => {
+  const slackService = new SlackService();
+  JSON.parse(event.postData.contents);
+  const params: postData = JSON.parse(event.postData.contents) as postData;
+
+  switch (params.type) {
+    // Slack Events API verification
+    case "url_verification":
+      return ContentService.createTextOutput(params.challenge);
+    // posted by user
+    case "event_callback":
+      slackService.receiveMessage(params.event.channel, params.event.text);
+      break;
   }
 };
-*/
