@@ -19,38 +19,19 @@ export class MessageService {
   }
 
   makeJudgeTweet(dajare: DajareModel): string {
-    let result = this.JUDGE_TWEET;
-    const intScore = Math.round(dajare.getScore());
-
-    result = result.replace("${timestamp}", new Date().toISOString());
-    result = result.replace("${dajare_text}", dajare.getText());
-    result = result.replace("${author}", dajare.getAuthor().getName());
-    result = result.replace(
-      "${dajare_star}",
-      `${"★".repeat(intScore)}${"☆".repeat(5 - intScore)}`
-    );
-
-    return result;
+    return this.fillPlaceholders(this.JUDGE_TWEET, dajare);
   }
 
   makeRankingTweet(dajare: DajareModel): string {
-    let result = this.RANKING_TWEET;
-    const intScore = Math.round(dajare.getScore());
-
-    result = result.replace("${timestamp}", new Date().toISOString());
-    result = result.replace("${dajare_text}", dajare.getText());
-    result = result.replace("${author}", dajare.getAuthor().getName());
-    result = result.replace(
-      "${dajare_star}",
-      `${"★".repeat(intScore)}${"☆".repeat(5 - intScore)}`
-    );
-    result = result.replace("${dajare_score}", dajare.getScore().toFixed(2));
-
-    return result;
+    return this.fillPlaceholders(this.RANKING_TWEET, dajare);
   }
 
   makeSlackPreview(dajare: DajareModel): string {
-    let result = this.SLACK_PREVIEW;
+    return this.fillPlaceholders(this.SLACK_PREVIEW, dajare);
+  }
+
+  private fillPlaceholders(template: string, dajare: DajareModel): string {
+    let result = template;
     const intScore = Math.round(dajare.getScore());
 
     result = result.replace("${timestamp}", new Date().toISOString());
