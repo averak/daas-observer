@@ -14,4 +14,3 @@ export {
   TOKEN_SHEET_NAME,
   LOG_SHEET_NAME,
 } from "./SheetConfig";
-export { SLACK_OAUTH_TOKEN } from "./TokenConfig";

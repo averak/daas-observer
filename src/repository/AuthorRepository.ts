@@ -1,5 +1,5 @@
 import { AuthorModel } from "../model";
-import { SLACK_OAUTH_TOKEN } from "../config";
+import { TokenService } from "../service";
 
 interface postParams {
   ok: boolean;
@@ -16,9 +16,11 @@ interface postParams {
 
 export class AuthorRepository {
   private authors!: AuthorModel[];
+  private tokenService: TokenService;
 
   constructor() {
     this.findAll();
+    this.tokenService = new TokenService();
   }
 
   findAll(): AuthorModel[] {
@@ -30,7 +32,7 @@ export class AuthorRepository {
         method: "get",
         contentType: "application/x-www-form-urlencoded",
         payload: {
-          token: SLACK_OAUTH_TOKEN,
+          token: this.tokenService.getSlackToken(),
         },
       });
     } catch (e) {
