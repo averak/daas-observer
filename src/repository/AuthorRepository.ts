@@ -19,8 +19,8 @@ export class AuthorRepository {
   private tokenService: TokenService;
 
   constructor() {
-    this.findAll();
     this.tokenService = new TokenService();
+    this.updateAuthors();
   }
 
   findAll(): AuthorModel[] {
@@ -49,8 +49,11 @@ export class AuthorRepository {
       result.push(author);
     });
 
-    this.authors = this.findAll();
     return result;
+  }
+
+  updateAuthors(): void {
+    this.authors = this.findAll();
   }
 
   findById(id: string): AuthorModel | undefined {

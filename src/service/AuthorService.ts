@@ -17,7 +17,7 @@ export class AuthorService {
 
   exists(id: string): boolean {
     if (this.authorRepository.findById(id) == undefined) {
-      this.authorRepository.findAll();
+      this.authorRepository.updateAuthors();
       return this.authorRepository.findById(id) != undefined;
     } else {
       return true;
