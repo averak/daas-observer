@@ -1,5 +1,5 @@
-export {
-  DAJARE_API_ROOT,
+export { DAJARE_API_ROOT } from "./DajareConfig";
+export type {
   judgeResponse,
   evalResponse,
   readingResponse,
