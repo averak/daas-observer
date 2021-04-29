@@ -57,8 +57,7 @@ export class SlackEventsController {
     // logging
     LogUtil.logging(
       `catch slack event {type: ${params.type}, event_id: ${params.event_id}}`,
-      "INFO",
-      false
+      "INFO"
     );
 
     return ContentService.createTextOutput("success to receive event");

@@ -9,7 +9,7 @@ declare const global: {
 const slackEventsController = new SlackEventsController();
 
 global.doGet = () => {
-  LogUtil.logging("API called from browser", "INFO", false);
+  LogUtil.logging("API called from browser", "INFO");
 };
 
 global.doPost = (
