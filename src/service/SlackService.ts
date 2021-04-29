@@ -26,18 +26,6 @@ export class SlackService {
       | SlackChannelModel
       | undefined = this.slackChannelRepository.findById(channelId);
 
-    // create dajare object
-    let dajare = new DajareModel(message);
-
-    // set author
-    const author: AuthorModel | undefined = this.authorService.findById(userId);
-    if (author == undefined) {
-      SlackUtil.logging("cannot find author", "ERROR");
-      return;
-    } else {
-      dajare.setAuthor(author);
-    }
-
     // channel filtering
     if (channel == undefined) {
       return;
@@ -48,6 +36,18 @@ export class SlackService {
     ) {
       return;
     }
+
+    // create dajare object
+    let dajare = new DajareModel(message);
+    // set author
+    const author: AuthorModel | undefined = this.authorService.findById(userId);
+    if (author == undefined) {
+      SlackUtil.logging("cannot find author", "ERROR");
+      return;
+    } else {
+      dajare.setAuthor(author);
+    }
+
     // bot filtering
     if (author.getIsBot()) {
       return;

@@ -1,6 +1,7 @@
 import { DajareModel } from "../model";
 import { DajareClient } from "../client";
 import { DajareRepository } from "../repository";
+import { SlackUtil } from "../util";
 
 export class DajareService {
   private dajareClient: DajareClient;
@@ -13,9 +14,16 @@ export class DajareService {
 
   fetchInfo(dajare: DajareModel): DajareModel {
     // use DaaS
-    dajare = this.dajareClient.judgeDajare(dajare);
-    dajare = this.dajareClient.evalDajare(dajare);
-    dajare = this.dajareClient.readingDajare(dajare);
+    try {
+      dajare = this.dajareClient.judgeDajare(dajare);
+      dajare = this.dajareClient.evalDajare(dajare);
+      dajare = this.dajareClient.readingDajare(dajare);
+    } catch (e) {
+      dajare.setIsDajare(false);
+      dajare.setScore(1.0);
+      dajare.setReading("");
+      SlackUtil.logging("failed to connect DaaS", "ERROR");
+    }
 
     return dajare;
   }
