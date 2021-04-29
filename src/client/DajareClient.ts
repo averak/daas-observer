@@ -16,7 +16,7 @@ export class DajareClient {
         `${DAJARE_API_ROOT}/judge/?dajare=${dajare.getText()}`
       );
     } catch (e) {
-      SlackUtil.logging("ERROR: failed to access judge engine");
+      SlackUtil.logging("failed to access judge engine", "ERROR");
       dajare.setIsDajare(false);
       return dajare;
     }
@@ -37,7 +37,7 @@ export class DajareClient {
         `${DAJARE_API_ROOT}/eval/?dajare=${dajare.getText()}`
       );
     } catch (e) {
-      SlackUtil.logging("ERROR: failed to access eval engine");
+      SlackUtil.logging("failed to access eval engine", "ERROR");
       dajare.setScore(1.0);
       return dajare;
     }
@@ -58,7 +58,7 @@ export class DajareClient {
         `${DAJARE_API_ROOT}/reading/?dajare=${dajare.getText()}`
       );
     } catch (e) {
-      SlackUtil.logging("ERROR: failed to access eval reading");
+      SlackUtil.logging("failed to access eval reading", "ERROR");
       dajare.setReading("");
       return dajare;
     }

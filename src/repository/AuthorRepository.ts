@@ -37,7 +37,7 @@ export class AuthorRepository {
         },
       });
     } catch (e) {
-      SlackUtil.logging("ERROR: failed to fetch user list");
+      SlackUtil.logging("failed to fetch user list", "ERROR");
       return result;
     }
 

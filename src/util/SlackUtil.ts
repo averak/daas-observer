@@ -24,7 +24,10 @@ export class SlackUtil {
     slackClient.postMessage(channel, message);
   }
 
-  static logging(logMessage: string): void {
-    SlackUtil.postMessage(LOG_CHANNEL_NAME, logMessage);
+  static logging(
+    message: string,
+    level: "DEBUG" | "INFO" | "WARN" | "ERROR" = "INFO"
+  ): void {
+    SlackUtil.postMessage(LOG_CHANNEL_NAME, `${level}: ${message}`);
   }
 }

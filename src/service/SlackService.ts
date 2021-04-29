@@ -32,7 +32,7 @@ export class SlackService {
     // set author
     const author: AuthorModel | undefined = this.authorService.findById(userId);
     if (author == undefined) {
-      SlackUtil.logging("ERROR: cannot find author");
+      SlackUtil.logging("cannot find author", "ERROR");
       return;
     } else {
       dajare.setAuthor(author);
@@ -49,10 +49,8 @@ export class SlackService {
       return;
     }
     // bot filtering
-    if (author != undefined) {
-      if (author.getIsBot()) {
-        return;
-      }
+    if (author.getIsBot()) {
+      return;
     }
 
     // judge & eval
