@@ -37,7 +37,7 @@ export class AuthorRepository {
         },
       });
     } catch (e) {
-      LogUtil.logging("failed to fetch user list", "ERROR");
+      LogUtil.logging("failed to fetch user list", "WARN");
       return result;
     }
 

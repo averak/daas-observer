@@ -21,33 +21,37 @@ export class SlackService {
     this.authorService = new AuthorService();
   }
 
-  eventFilter(channelId: string, userId: string): boolean {
-    // fetch channel
-    const channel:
-      | SlackChannelModel
-      | undefined = this.slackChannelRepository.findById(channelId);
-    // fetch author
-    const author: AuthorModel | undefined = this.authorService.findById(userId);
-    if (author == undefined) {
-      return false;
+  eventFilter(channelId: string, userId: string, text: string): boolean {
+    // text filtering
+    const regex = RegExp("ERROR");
+    if (regex.exec(text)) {
+      return true;
     }
 
     // channel filtering
+    const channel:
+      | SlackChannelModel
+      | undefined = this.slackChannelRepository.findById(channelId);
     if (channel == undefined) {
-      return false;
+      return true;
     }
     if (
       channel.getName() != DAAS_CHANNEL_NAME &&
       channel.getName() != TEST_CHANNEL_NAME
     ) {
-      return false;
-    }
-    // bot filtering
-    if (author.getIsBot()) {
-      return false;
+      return true;
     }
 
-    return true;
+    // author filtering
+    const author: AuthorModel | undefined = this.authorService.findById(userId);
+    if (author == undefined) {
+      return true;
+    }
+    if (author.getIsBot()) {
+      return true;
+    }
+
+    return false;
   }
 
   receiveMessage(userId: string, message: string): void {

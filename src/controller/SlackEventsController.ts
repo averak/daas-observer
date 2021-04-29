@@ -30,20 +30,13 @@ export class SlackEventsController {
     ) as postParams;
 
     // ignore received request
-    if (this.eventIdList.includes(params.event_id)) {
+    if (this.eventIdList.indexOf(params.event_id) != -1) {
       return ContentService.createTextOutput("this event is already received");
     }
     // cache event id
     this.eventIdList.push(params.event_id);
     if (this.eventIdList.length > 10) {
       this.eventIdList.shift();
-    }
-
-    // event filtering
-    if (
-      this.slackService.eventFilter(params.event.channel, params.event.user)
-    ) {
-      return ContentService.createTextOutput("this event is not allowed");
     }
 
     // control slack event
@@ -54,6 +47,20 @@ export class SlackEventsController {
 
       // posted by user
       case "event_callback":
+        // event filtering
+        if (
+          this.slackService.eventFilter(
+            params.event.channel,
+            params.event.user,
+            params.event.text
+          )
+        ) {
+          const logMessage = "this event is not allowed";
+          LogUtil.logging(logMessage, "WARN");
+          return ContentService.createTextOutput(logMessage);
+        }
+
+        // action
         this.slackService.receiveMessage(params.event.user, params.event.text);
         break;
     }
