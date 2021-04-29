@@ -8,9 +8,12 @@ const sheet = sheetApp.getSheetByName(LOG_SHEET_NAME);
 export class LogUtil {
   static logging(
     message: string,
-    level: "DEBUG" | "INFO" | "WARN" | "ERROR" = "INFO"
+    level: "DEBUG" | "INFO" | "WARN" | "ERROR" = "INFO",
+    slack = true
   ): void {
-    SlackUtil.postMessage(LOG_CHANNEL_NAME, `${level}: ${message}`);
+    if (slack) {
+      SlackUtil.postMessage(LOG_CHANNEL_NAME, `${level}: ${message}`);
+    }
     sheet?.appendRow([new Date(), level, message]);
   }
 }

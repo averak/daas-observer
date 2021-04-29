@@ -1,4 +1,5 @@
 import { SlackService } from "../service";
+import { LogUtil } from "../util";
 
 interface postParams {
   type: string;
@@ -52,6 +53,13 @@ export class SlackEventsController {
         );
         break;
     }
+
+    // logging
+    LogUtil.logging(
+      `catch slack event {type: ${params.type}, event_id: ${params.event_id}}`,
+      "INFO",
+      false
+    );
 
     return ContentService.createTextOutput("success to receive event");
   }
