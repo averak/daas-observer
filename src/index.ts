@@ -8,8 +8,9 @@ declare const global: {
 // slack event controller
 const slackEventsController = new SlackEventsController();
 
-global.doGet = () => {
+global.doGet = (): GoogleAppsScript.Content.TextOutput => {
   LogUtil.logging("API called from browser", "INFO");
+  return ContentService.createTextOutput("success to receive event");
 };
 
 global.doPost = (
