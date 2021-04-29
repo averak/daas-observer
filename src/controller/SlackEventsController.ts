@@ -1,4 +1,4 @@
-import { SlackService } from "../service";
+import { SlackService, EventIdService } from "../service";
 import { LogUtil } from "../util";
 
 interface postParams {
@@ -15,11 +15,11 @@ interface postParams {
 
 export class SlackEventsController {
   private slackService: SlackService;
-  private eventIdList: string[];
+  private eventIdService: EventIdService;
 
   constructor() {
     this.slackService = new SlackService();
-    this.eventIdList = [];
+    this.eventIdService = new EventIdService();
   }
 
   receiveEvent(
@@ -29,14 +29,11 @@ export class SlackEventsController {
       event.postData.contents
     ) as postParams;
 
-    // ignore received request
-    if (this.eventIdList.indexOf(params.event_id) != -1) {
+    // ignore already received request
+    if (this.eventIdService.exists(params.event_id)) {
       return ContentService.createTextOutput("this event is already received");
-    }
-    // cache event id
-    this.eventIdList.push(params.event_id);
-    if (this.eventIdList.length > 10) {
-      this.eventIdList.shift();
+    } else {
+      this.eventIdService.store(params.event_id);
     }
 
     // control slack event
