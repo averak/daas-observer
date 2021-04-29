@@ -11,6 +11,7 @@ interface postParams {
     channel: string;
     user: string;
     text: string;
+    ts: string;
   };
 }
 
@@ -35,6 +36,7 @@ export class SlackEventsController {
     slackEvent.setChannelId(params.event.channel);
     slackEvent.setUserId(params.event.user);
     slackEvent.setMessage(params.event.text);
+    slackEvent.setTimestamp(params.event.ts);
 
     // ignore already received request
     if (this.slackEventService.exists(slackEvent)) {

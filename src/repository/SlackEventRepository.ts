@@ -9,7 +9,7 @@ export class SlackEventRepository extends AbstractRepository {
 
   store(slackEvent: SlackEventModel): void {
     this.sheet?.appendRow([
-      new Date(),
+      slackEvent.getTimestamp(),
       slackEvent.getId(),
       slackEvent.getType(),
       slackEvent.getChannelId(),

@@ -10,6 +10,8 @@ import {
   DAAS_CHANNEL_NAME,
   TEST_CHANNEL_NAME,
   PREVIEW_CHANNEL_NAME,
+  THUMBSUP_REACTION_NAME,
+  THUMBSDOWN_REACTION_NAME,
 } from "../config";
 import { SlackUtil, LogUtil } from "../util";
 
@@ -80,8 +82,13 @@ export class SlackService {
     dajare = this.dajareService.fetchInfo(dajare);
 
     // post message
-    const slackPreviewMessage = this.messageService.makeSlackPreview(dajare);
-    SlackUtil.postMessage(PREVIEW_CHANNEL_NAME, slackPreviewMessage);
+    if (dajare.getIsDajare()) {
+      const slackPreviewMessage = this.messageService.makeSlackPreview(dajare);
+      SlackUtil.addReaction(slackEvent, THUMBSUP_REACTION_NAME);
+      SlackUtil.postMessage(PREVIEW_CHANNEL_NAME, slackPreviewMessage);
+    } else {
+      SlackUtil.addReaction(slackEvent, THUMBSDOWN_REACTION_NAME);
+    }
 
     // store in sheet
     this.dajareService.store(dajare);

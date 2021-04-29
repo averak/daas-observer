@@ -4,6 +4,7 @@ export class SlackEventModel {
   private channelId!: string;
   private userId!: string;
   private message!: string;
+  private timestamp!: string;
 
   constructor(id: string) {
     this.id = id;
@@ -47,6 +48,14 @@ export class SlackEventModel {
 
   setMessage(message: string): void {
     this.message = message;
+  }
+
+  getTimestamp(): string {
+    return this.timestamp;
+  }
+
+  setTimestamp(timestamp: string): void {
+    this.timestamp = timestamp;
   }
 
   equals(slackEvent: SlackEventModel): boolean {

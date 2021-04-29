@@ -1,4 +1,4 @@
-import { SlackChannelModel } from "../model";
+import { SlackChannelModel, SlackEventModel } from "../model";
 import { SlackChannelRepository } from "../repository";
 import { SlackClient } from "../client";
 
@@ -21,5 +21,10 @@ export class SlackUtil {
 
     // post
     slackClient.postMessage(channel, message);
+  }
+
+  static addReaction(slackEvent: SlackEventModel, reactionName: string): void {
+    // add reaction
+    slackClient.addReaction(slackEvent, reactionName);
   }
 }
