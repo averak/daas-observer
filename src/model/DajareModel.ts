@@ -1,11 +1,9 @@
-import { AuthorModel } from "./AuthorModel";
-
 export class DajareModel {
   private text: string;
   private reading!: string;
   private isDajare!: boolean;
   private score!: number;
-  private author!: AuthorModel;
+  private authorName!: string;
 
   constructor(text: string) {
     this.text = text;
@@ -47,12 +45,12 @@ export class DajareModel {
     return this.score;
   }
 
-  setAuthor(author: AuthorModel): void {
-    this.author = author;
+  setAuthorName(authorName: string): void {
+    this.authorName = authorName;
   }
 
-  getAuthor(): AuthorModel {
-    return this.author;
+  getAuthorName(): string {
+    return this.authorName;
   }
 
   equals(dajare: DajareModel): boolean {

@@ -36,7 +36,7 @@ export class MessageService {
 
     result = result.replace("${timestamp}", new Date().toISOString());
     result = result.replace("${dajare_text}", dajare.getText());
-    result = result.replace("${author}", dajare.getAuthor().getName());
+    result = result.replace("${author}", dajare.getAuthorName());
     result = result.replace(
       "${dajare_star}",
       `${"★".repeat(intScore)}${"☆".repeat(5 - intScore)}`

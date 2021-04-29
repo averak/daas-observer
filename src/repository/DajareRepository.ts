@@ -13,7 +13,7 @@ export class DajareRepository extends AbstractRepository {
       dajare.getText(),
       dajare.getScore(),
       dajare.getIsDajare(),
-      dajare.getAuthor().getName(),
+      dajare.getAuthorName(),
     ]);
   }
 }
