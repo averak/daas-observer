@@ -22,9 +22,16 @@ export class SlackService {
   }
 
   receiveMessage(channelId: string, userId: string, message: string): void {
+    // fetch channel
     const channel:
       | SlackChannelModel
       | undefined = this.slackChannelRepository.findById(channelId);
+    // fetch author
+    const author: AuthorModel | undefined = this.authorService.findById(userId);
+    if (author == undefined) {
+      LogUtil.logging("cannot find author", "ERROR");
+      return;
+    }
 
     // channel filtering
     if (channel == undefined) {
@@ -36,23 +43,14 @@ export class SlackService {
     ) {
       return;
     }
-
-    // create dajare object
-    let dajare = new DajareModel(message);
-    // set author
-    const author: AuthorModel | undefined = this.authorService.findById(userId);
-    if (author == undefined) {
-      LogUtil.logging("cannot find author", "ERROR");
-      return;
-    } else {
-      dajare.setAuthor(author);
-    }
-
     // bot filtering
     if (author.getIsBot()) {
       return;
     }
 
+    // create dajare object
+    let dajare = new DajareModel(message);
+    dajare.setAuthor(author);
     // judge & eval
     dajare = this.dajareService.fetchInfo(dajare);
 
