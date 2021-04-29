@@ -1,26 +1,25 @@
-import { EventModel } from "../model";
+import { SlackEventModel } from "../model";
 import { EVENT_SHEET_NAME } from "../config";
 import { AbstractRepository } from "./AbstractRepository";
-import { LogUtil } from "../util";
 
-export class EventRepository extends AbstractRepository {
+export class SlackEventRepository extends AbstractRepository {
   onInit(): void {
     this.loadSheet(EVENT_SHEET_NAME);
   }
 
-  store(event: EventModel): void {
+  store(slackEvent: SlackEventModel): void {
     this.sheet?.appendRow([
       new Date(),
-      event.getId(),
-      event.getType(),
-      event.getChannelId(),
-      event.getUserId(),
-      event.getMessage(),
+      slackEvent.getId(),
+      slackEvent.getType(),
+      slackEvent.getChannelId(),
+      slackEvent.getUserId(),
+      slackEvent.getMessage(),
     ]);
   }
 
-  findAll(): EventModel[] {
-    const result: EventModel[] = [];
+  findAll(): SlackEventModel[] {
+    const result: SlackEventModel[] = [];
 
     // range settings
     const START_COL = 2;
@@ -44,12 +43,12 @@ export class EventRepository extends AbstractRepository {
         continue;
       }
 
-      const event = new EventModel(cells[i][0]);
-      event.setType(cells[i][1]);
-      event.setChannelId(cells[i][2]);
-      event.setUserId(cells[i][3]);
-      event.setMessage(cells[i][4]);
-      result.push(event);
+      const slackEvent = new SlackEventModel(cells[i][0]);
+      slackEvent.setType(cells[i][1]);
+      slackEvent.setChannelId(cells[i][2]);
+      slackEvent.setUserId(cells[i][3]);
+      slackEvent.setMessage(cells[i][4]);
+      result.push(slackEvent);
     }
 
     return result;

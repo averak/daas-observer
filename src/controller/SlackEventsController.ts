@@ -1,5 +1,5 @@
-import { EventModel } from "../model";
-import { SlackService, EventService } from "../service";
+import { SlackEventModel } from "../model";
+import { SlackService, SlackEventService } from "../service";
 import { LogUtil } from "../util";
 
 interface postParams {
@@ -16,11 +16,11 @@ interface postParams {
 
 export class SlackEventsController {
   private slackService: SlackService;
-  private eventService: EventService;
+  private slackEventService: SlackEventService;
 
   constructor() {
     this.slackService = new SlackService();
-    this.eventService = new EventService();
+    this.slackEventService = new SlackEventService();
   }
 
   receiveEvent(
@@ -30,38 +30,38 @@ export class SlackEventsController {
     const result = ContentService.createTextOutput(params.challenge);
 
     // create event object
-    const event = new EventModel(params.event_id);
-    event.setType(params.type);
-    event.setChannelId(params.event.channel);
-    event.setUserId(params.event.user);
-    event.setMessage(params.event.text);
+    const slackEvent = new SlackEventModel(params.event_id);
+    slackEvent.setType(params.type);
+    slackEvent.setChannelId(params.event.channel);
+    slackEvent.setUserId(params.event.user);
+    slackEvent.setMessage(params.event.text);
 
     // ignore already received request
-    if (this.eventService.exists(event)) {
+    if (this.slackEventService.exists(slackEvent)) {
       LogUtil.logging("this event is already received", "WARN");
       return result;
     }
 
-    // control slack event
-    if (event.getType() == "url_verification") {
-      // Slack Events API verification
+    // control slack slackEvent
+    if (slackEvent.getType() == "url_verification") {
+      // Slack slackEvents API verification
       return result;
     }
-    if (event.getType() == "event_callback") {
+    if (slackEvent.getType() == "event_callback") {
       // event filtering
-      if (this.slackService.eventFilter(event)) {
+      if (this.slackService.slackEventFilter(slackEvent)) {
         LogUtil.logging("this event is not allowed", "WARN");
         return result;
       }
 
       // action
-      this.eventService.store(event);
-      this.slackService.receiveMessage(event);
+      this.slackEventService.store(slackEvent);
+      this.slackService.receiveMessage(slackEvent);
     }
 
     // logging
     LogUtil.logging(
-      `catch slack event {type: ${event.getType()}, event_id: ${event.getId()}}`,
+      `catch slack slackEvent {type: ${slackEvent.getType()}, slackEvent_id: ${slackEvent.getId()}}`,
       "INFO"
     );
 

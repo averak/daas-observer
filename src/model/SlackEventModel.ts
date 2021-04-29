@@ -1,4 +1,4 @@
-export class EventModel {
+export class SlackEventModel {
   private id!: string;
   private type!: string;
   private channelId!: string;
@@ -49,7 +49,7 @@ export class EventModel {
     this.message = message;
   }
 
-  equals(event: EventModel): boolean {
-    return event.getId() == this.getId();
+  equals(slackEvent: SlackEventModel): boolean {
+    return slackEvent.getId() == this.getId();
   }
 }

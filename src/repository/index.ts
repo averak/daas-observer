@@ -1,4 +1,4 @@
 export { DajareRepository } from "./DajareRepository";
 export { SlackChannelRepository } from "./SlackChannelRepository";
 export { AuthorRepository } from "./AuthorRepository";
-export { EventRepository } from "./EventRepository";
+export { SlackEventRepository } from "./SlackEventRepository";

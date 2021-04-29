@@ -2,7 +2,7 @@ import {
   DajareModel,
   SlackChannelModel,
   AuthorModel,
-  EventModel,
+  SlackEventModel,
 } from "../model";
 import { SlackChannelRepository } from "../repository";
 import { DajareService, MessageService, AuthorService } from "../service";
@@ -26,17 +26,19 @@ export class SlackService {
     this.authorService = new AuthorService();
   }
 
-  eventFilter(event: EventModel): boolean {
+  slackEventFilter(slackEvent: SlackEventModel): boolean {
     // text filtering
     const regex = RegExp("ERROR");
-    if (regex.exec(event.getMessage())) {
+    if (regex.exec(slackEvent.getMessage())) {
       return true;
     }
 
     // channel filtering
     const channel:
       | SlackChannelModel
-      | undefined = this.slackChannelRepository.findById(event.getChannelId());
+      | undefined = this.slackChannelRepository.findById(
+      slackEvent.getChannelId()
+    );
     if (channel == undefined) {
       return true;
     }
@@ -49,7 +51,7 @@ export class SlackService {
 
     // author filtering
     const author: AuthorModel | undefined = this.authorService.findById(
-      event.getUserId()
+      slackEvent.getUserId()
     );
     if (author == undefined) {
       return true;
@@ -61,10 +63,10 @@ export class SlackService {
     return false;
   }
 
-  receiveMessage(event: EventModel): void {
+  receiveMessage(slackEvent: SlackEventModel): void {
     // fetch author
     const author: AuthorModel | undefined = this.authorService.findById(
-      event.getUserId()
+      slackEvent.getUserId()
     );
     if (author == undefined) {
       LogUtil.logging("cannot find author", "ERROR");
@@ -72,7 +74,7 @@ export class SlackService {
     }
 
     // create dajare object
-    let dajare = new DajareModel(event.getMessage());
+    let dajare = new DajareModel(slackEvent.getMessage());
     dajare.setAuthor(author);
     // judge & eval
     dajare = this.dajareService.fetchInfo(dajare);
