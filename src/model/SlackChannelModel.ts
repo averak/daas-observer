@@ -41,4 +41,8 @@ export class SlackChannelModel {
   getPostable(): boolean {
     return !(this.getWebhookURL() == undefined || this.getWebhookURL() == "");
   }
+
+  equals(slackChannel: SlackChannelModel): boolean {
+    return slackChannel.getId() == this.getId();
+  }
 }

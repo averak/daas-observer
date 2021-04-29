@@ -35,4 +35,8 @@ export class AuthorModel {
   getIsBot(): boolean {
     return this.isBot;
   }
+
+  equals(author: AuthorModel): boolean {
+    return author.getId() == this.getId();
+  }
 }

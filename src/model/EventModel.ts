@@ -48,4 +48,8 @@ export class EventModel {
   setMessage(message: string): void {
     this.message = message;
   }
+
+  equals(event: EventModel): boolean {
+    return event.getId() == this.getId();
+  }
 }

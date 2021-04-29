@@ -39,7 +39,7 @@ export class EventRepository extends AbstractRepository {
       return result;
     }
 
-    for (let i = START_ROW; i < END_ROW; i++) {
+    for (let i = 0; i < END_ROW; i++) {
       if (cells[i][0] == "") {
         continue;
       }

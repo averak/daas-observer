@@ -13,6 +13,12 @@ export class EventService {
   }
 
   exists(event: EventModel): boolean {
-    return this.eventRepository.findAll().indexOf(event) != -1;
+    const eventList: EventModel[] = this.eventRepository.findAll();
+    for (let i = 0; i < eventList.length; i++) {
+      if (event.equals(eventList[i])) {
+        return true;
+      }
+    }
+    return false;
   }
 }

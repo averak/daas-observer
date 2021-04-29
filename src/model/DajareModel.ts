@@ -54,4 +54,8 @@ export class DajareModel {
   getAuthor(): AuthorModel {
     return this.author;
   }
+
+  equals(dajare: DajareModel): boolean {
+    return dajare.getText() == this.getText();
+  }
 }
