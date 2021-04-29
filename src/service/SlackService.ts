@@ -1,4 +1,9 @@
-import { DajareModel, SlackChannelModel, AuthorModel } from "../model";
+import {
+  DajareModel,
+  SlackChannelModel,
+  AuthorModel,
+  EventModel,
+} from "../model";
 import { SlackChannelRepository } from "../repository";
 import { DajareService, MessageService, AuthorService } from "../service";
 import {
@@ -21,17 +26,17 @@ export class SlackService {
     this.authorService = new AuthorService();
   }
 
-  eventFilter(channelId: string, userId: string, text: string): boolean {
+  eventFilter(event: EventModel): boolean {
     // text filtering
     const regex = RegExp("ERROR");
-    if (regex.exec(text)) {
+    if (regex.exec(event.getMessage())) {
       return true;
     }
 
     // channel filtering
     const channel:
       | SlackChannelModel
-      | undefined = this.slackChannelRepository.findById(channelId);
+      | undefined = this.slackChannelRepository.findById(event.getChannelId());
     if (channel == undefined) {
       return true;
     }
@@ -43,7 +48,9 @@ export class SlackService {
     }
 
     // author filtering
-    const author: AuthorModel | undefined = this.authorService.findById(userId);
+    const author: AuthorModel | undefined = this.authorService.findById(
+      event.getUserId()
+    );
     if (author == undefined) {
       return true;
     }
@@ -54,16 +61,18 @@ export class SlackService {
     return false;
   }
 
-  receiveMessage(userId: string, message: string): void {
+  receiveMessage(event: EventModel): void {
     // fetch author
-    const author: AuthorModel | undefined = this.authorService.findById(userId);
+    const author: AuthorModel | undefined = this.authorService.findById(
+      event.getUserId()
+    );
     if (author == undefined) {
       LogUtil.logging("cannot find author", "ERROR");
       return;
     }
 
     // create dajare object
-    let dajare = new DajareModel(message);
+    let dajare = new DajareModel(event.getMessage());
     dajare.setAuthor(author);
     // judge & eval
     dajare = this.dajareService.fetchInfo(dajare);

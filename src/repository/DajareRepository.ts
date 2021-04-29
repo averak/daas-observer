@@ -1,6 +1,5 @@
 import { DajareModel } from "../model";
 import { DAJARE_SHEET_NAME } from "../config";
-
 import { AbstractRepository } from "./AbstractRepository";
 
 export class DajareRepository extends AbstractRepository {
