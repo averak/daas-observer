@@ -6,7 +6,7 @@ import {
   TEST_CHANNEL_NAME,
   PREVIEW_CHANNEL_NAME,
 } from "../config";
-import { SlackUtil } from "../util";
+import { SlackUtil, LogUtil } from "../util";
 
 export class SlackService {
   private slackChannelRepository: SlackChannelRepository;
@@ -42,7 +42,7 @@ export class SlackService {
     // set author
     const author: AuthorModel | undefined = this.authorService.findById(userId);
     if (author == undefined) {
-      SlackUtil.logging("cannot find author", "ERROR");
+      LogUtil.logging("cannot find author", "ERROR");
       return;
     } else {
       dajare.setAuthor(author);

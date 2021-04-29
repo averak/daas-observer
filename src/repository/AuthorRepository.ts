@@ -1,6 +1,6 @@
 import { AuthorModel } from "../model";
 import { TokenService } from "../service";
-import { SlackUtil } from "../util";
+import { LogUtil } from "../util";
 
 interface postParams {
   ok: boolean;
@@ -37,7 +37,7 @@ export class AuthorRepository {
         },
       });
     } catch (e) {
-      SlackUtil.logging("failed to fetch user list", "ERROR");
+      LogUtil.logging("failed to fetch user list", "ERROR");
       return result;
     }
 

@@ -1,7 +1,7 @@
 import { DajareModel } from "../model";
 import { DajareClient } from "../client";
 import { DajareRepository } from "../repository";
-import { SlackUtil } from "../util";
+import { LogUtil } from "../util";
 
 export class DajareService {
   private dajareClient: DajareClient;
@@ -22,7 +22,7 @@ export class DajareService {
       dajare.setIsDajare(false);
       dajare.setScore(1.0);
       dajare.setReading("");
-      SlackUtil.logging("failed to connect DaaS", "ERROR");
+      LogUtil.logging("failed to connect DaaS", "ERROR");
     }
 
     return dajare;

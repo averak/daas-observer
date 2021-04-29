@@ -1,7 +1,6 @@
 import { SlackChannelModel } from "../model";
 import { SlackChannelRepository } from "../repository";
 import { SlackClient } from "../client";
-import { LOG_CHANNEL_NAME } from "../config";
 
 const slackClient = new SlackClient();
 const slackChannelRepository = new SlackChannelRepository();
@@ -22,12 +21,5 @@ export class SlackUtil {
 
     // post
     slackClient.postMessage(channel, message);
-  }
-
-  static logging(
-    message: string,
-    level: "DEBUG" | "INFO" | "WARN" | "ERROR" = "INFO"
-  ): void {
-    SlackUtil.postMessage(LOG_CHANNEL_NAME, `${level}: ${message}`);
   }
 }
