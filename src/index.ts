@@ -10,7 +10,7 @@ const slackEventsController = new SlackEventsController();
 
 global.doGet = (): GoogleAppsScript.Content.TextOutput => {
   LogUtil.logging("API called from browser", "INFO");
-  return ContentService.createTextOutput("success to receive event");
+  return ContentService.createTextOutput("This API does not support GET");
 };
 
 global.doPost = (

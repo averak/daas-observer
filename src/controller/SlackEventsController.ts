@@ -39,6 +39,14 @@ export class SlackEventsController {
       this.eventIdList.shift();
     }
 
+    // event filtering
+    if (
+      this.slackService.eventFilter(params.event.channel, params.event.user)
+    ) {
+      return ContentService.createTextOutput("this event is not allowed");
+    }
+
+    // control slack event
     switch (params.type) {
       // Slack Events API verification
       case "url_verification":
@@ -46,11 +54,7 @@ export class SlackEventsController {
 
       // posted by user
       case "event_callback":
-        this.slackService.receiveMessage(
-          params.event.channel,
-          params.event.user,
-          params.event.text
-        );
+        this.slackService.receiveMessage(params.event.user, params.event.text);
         break;
     }
 

@@ -21,7 +21,7 @@ export class SlackService {
     this.authorService = new AuthorService();
   }
 
-  receiveMessage(channelId: string, userId: string, message: string): void {
+  eventFilter(channelId: string, userId: string): boolean {
     // fetch channel
     const channel:
       | SlackChannelModel
@@ -29,22 +29,32 @@ export class SlackService {
     // fetch author
     const author: AuthorModel | undefined = this.authorService.findById(userId);
     if (author == undefined) {
-      LogUtil.logging("cannot find author", "ERROR");
-      return;
+      return false;
     }
 
     // channel filtering
     if (channel == undefined) {
-      return;
+      return false;
     }
     if (
       channel.getName() != DAAS_CHANNEL_NAME &&
       channel.getName() != TEST_CHANNEL_NAME
     ) {
-      return;
+      return false;
     }
     // bot filtering
     if (author.getIsBot()) {
+      return false;
+    }
+
+    return true;
+  }
+
+  receiveMessage(userId: string, message: string): void {
+    // fetch author
+    const author: AuthorModel | undefined = this.authorService.findById(userId);
+    if (author == undefined) {
+      LogUtil.logging("cannot find author", "ERROR");
       return;
     }
 
