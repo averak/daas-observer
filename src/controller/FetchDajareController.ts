@@ -2,8 +2,14 @@ import { DajareModel } from "../model";
 import { DajareService } from "../service";
 import { LogUtil } from "../util";
 
-interface getParams {
+interface GetRequest {
   num: number;
+}
+
+interface FetchDajareResponse {
+  status: "OK";
+  num: number;
+  dajare: DajareModel[];
 }
 
 export class FetchDajareController {
@@ -16,8 +22,20 @@ export class FetchDajareController {
   fetchDajare(
     e: GoogleAppsScript.Events.DoGet
   ): GoogleAppsScript.Content.TextOutput {
-    const params: getParams = e.parameter as getParams;
+    const params: GetRequest = e.parameter as GetRequest;
     const num: number = params.num || 0;
-    return ContentService.createTextOutput(`dajare: ${num}`);
+
+    // fetch dajare
+    const dajareList = this.dajareService.fetchDajare(num);
+    LogUtil.logging("called fetchDajare API", "INFO");
+
+    // create json response
+    const result: FetchDajareResponse = {
+      status: "OK",
+      num: dajareList.length,
+      dajare: dajareList,
+    };
+
+    return ContentService.createTextOutput(JSON.stringify(result));
   }
 }

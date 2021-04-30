@@ -28,6 +28,11 @@ export class DajareService {
     return dajare;
   }
 
+  fetchDajare(num: number): DajareModel[] {
+    const dajareList = this.dajareRepository.findAll();
+    return dajareList.slice(0, num);
+  }
+
   store(dajare: DajareModel): void {
     this.dajareRepository.store(dajare);
   }

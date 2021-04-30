@@ -39,6 +39,7 @@ export class SlackEventRepository extends AbstractRepository {
     }
 
     for (let i = 0; i < END_ROW; i++) {
+      // event id is empty
       if (cells[i][0] == "") {
         continue;
       }

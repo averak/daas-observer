@@ -10,7 +10,7 @@ const slackEventsController = new SlackEventsController();
 const fetchDajareController = new FetchDajareController();
 
 // get paramater
-interface getParams {
+interface GetRequest {
   action: string;
 }
 
@@ -20,7 +20,7 @@ global.doGet = (
   let result: GoogleAppsScript.Content.TextOutput;
 
   // routing
-  const params: getParams = e.parameter as getParams;
+  const params: GetRequest = e.parameter as GetRequest;
   switch (params.action) {
     case undefined:
       result = ContentService.createTextOutput("action param is not specified");
