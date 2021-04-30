@@ -23,18 +23,20 @@ export class FetchDajareController {
     e: GoogleAppsScript.Events.DoGet
   ): GoogleAppsScript.Content.TextOutput {
     const params: GetRequest = e.parameter as GetRequest;
-    const num: number = params.num || 0;
+    let num: number = params.num || 0;
 
     // fetch dajare
     const dajareList = this.dajareService.fetchDajare(num);
-    LogUtil.logging("called fetchDajare API", "INFO");
+    num = dajareList.length;
 
     // create json response
     const result: FetchDajareResponse = {
       status: "OK",
-      num: dajareList.length,
+      num: num,
       dajare: dajareList,
     };
+
+    LogUtil.logging(`called fetchDajare API, return ${num} dajare`, "INFO");
 
     return ContentService.createTextOutput(JSON.stringify(result));
   }

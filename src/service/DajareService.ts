@@ -29,8 +29,17 @@ export class DajareService {
   }
 
   fetchDajare(num: number): DajareModel[] {
+    const result: DajareModel[] = [];
     const dajareList = this.dajareRepository.findAll();
-    return dajareList.slice(0, num);
+
+    // pick out only dajare
+    for (let i = 0; i < dajareList.length; i++) {
+      if (dajareList[i].getIsDajare()) {
+        result.push(dajareList[i]);
+      }
+    }
+
+    return result.slice(0, num);
   }
 
   store(dajare: DajareModel): void {
