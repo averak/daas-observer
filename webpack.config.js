@@ -3,7 +3,7 @@ const GasPlugin = require("gas-webpack-plugin");
 const Es3ifyPlugin = require("es3ify-webpack-plugin");
 
 module.exports = {
-  mode: "development",
+  mode: "production",
   devtool: "inline-source-map",
   context: __dirname,
   entry: {
