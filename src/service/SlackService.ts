@@ -14,6 +14,7 @@ import {
   THUMBSDOWN_REACTION_NAME,
 } from "../config";
 import { SlackUtil, LogUtil } from "../util";
+import { DiscordClient } from "../client";
 
 export class SlackService {
   private slackChannelRepository: SlackChannelRepository;
@@ -86,6 +87,21 @@ export class SlackService {
       const slackPreviewMessage = this.messageService.makeSlackPreview(dajare);
       SlackUtil.addReaction(slackEvent, THUMBSUP_REACTION_NAME);
       SlackUtil.postMessage(PREVIEW_CHANNEL_NAME, slackPreviewMessage);
+
+      // FIXME: 一時的なテストです
+      const discordClient = new DiscordClient();
+      let icon_url: string;
+      if (dajare.getScore() > 3.6) {
+        icon_url =
+          "https://conoha.mikumo.com/guideline/images/fanfic/fanfic_32.png";
+      } else if (dajare.getScore() > 2.3) {
+        icon_url =
+          "https://conoha.mikumo.com/guideline/images/fanfic/fanfic_29.png";
+      } else {
+        icon_url =
+          "https://conoha.mikumo.com/guideline/images/fanfic/fanfic_31.png";
+      }
+      discordClient.postMessage(slackPreviewMessage, icon_url);
     } else {
       SlackUtil.addReaction(slackEvent, THUMBSDOWN_REACTION_NAME);
     }
