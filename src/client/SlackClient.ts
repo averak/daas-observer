@@ -1,11 +1,11 @@
 import { SlackChannelModel, SlackEventModel } from "../model";
-import { TokenService } from "../service";
+import { EnvService } from "../service";
 
 export class SlackClient {
-  private tokenService: TokenService;
+  private envService: EnvService;
 
   constructor() {
-    this.tokenService = new TokenService();
+    this.envService = new EnvService();
   }
 
   postMessage(channel: SlackChannelModel, message: string): void {
@@ -26,7 +26,7 @@ export class SlackClient {
         method: "post",
         contentType: "application/x-www-form-urlencoded",
         payload: {
-          token: this.tokenService.getSlackToken(),
+          token: this.envService.getEnv("SLACK_TOKEN"),
           channel: slackEvent.getChannelId(),
           name: reactionName,
           timestamp: slackEvent.getTimestamp(),

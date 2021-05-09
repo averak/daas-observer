@@ -1,5 +1,5 @@
 import { AuthorModel } from "../model";
-import { TokenService } from "../service";
+import { EnvService } from "../service";
 import { LogUtil } from "../util";
 
 interface postParams {
@@ -17,10 +17,10 @@ interface postParams {
 
 export class AuthorRepository {
   private authors!: AuthorModel[];
-  private tokenService: TokenService;
+  private envService: EnvService;
 
   constructor() {
-    this.tokenService = new TokenService();
+    this.envService = new EnvService();
     this.updateAuthors();
   }
 
@@ -33,7 +33,7 @@ export class AuthorRepository {
         method: "get",
         contentType: "application/x-www-form-urlencoded",
         payload: {
-          token: this.tokenService.getSlackToken(),
+          token: this.envService.getEnv("SLACK_TOKEN"),
         },
       });
     } catch (e) {
