@@ -1,9 +1,3 @@
-export { DAJARE_API_ROOT } from "./DajareConfig";
-export type {
-  judgeResponse,
-  evalResponse,
-  readingResponse,
-} from "./DajareConfig";
 export {
   DAJARE_SHEET_NAME,
   EVENT_SHEET_NAME,
