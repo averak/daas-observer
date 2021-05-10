@@ -6,17 +6,20 @@ import {
 } from "../model";
 import { SlackChannelRepository } from "../repository";
 import { DajareService, MessageService, AuthorService } from "../service";
+import { SlackClient } from "../client";
 import { SLACK_CHANNELS, SLACK_REACTIONS } from "../config";
-import { SlackUtil, LogUtil } from "../util";
+import { LogUtil } from "../util";
 
 export class SlackService {
   private slackChannelRepository: SlackChannelRepository;
+  private slackClient: SlackClient;
   private dajareService: DajareService;
   private messageService: MessageService;
   private authorService: AuthorService;
 
   constructor() {
     this.slackChannelRepository = new SlackChannelRepository();
+    this.slackClient = new SlackClient();
     this.dajareService = new DajareService();
     this.messageService = new MessageService();
     this.authorService = new AuthorService();
@@ -65,7 +68,7 @@ export class SlackService {
       slackEvent.getUserId()
     );
     if (author == undefined) {
-      LogUtil.logging("cannot find author", "ERROR");
+      this.logging("cannot find author", "ERROR");
       return;
     }
 
@@ -78,13 +81,38 @@ export class SlackService {
     // post message
     if (dajare.getIsDajare()) {
       const slackPreviewMessage = this.messageService.makeSlackPreview(dajare);
-      SlackUtil.addReaction(slackEvent, SLACK_REACTIONS.thumbsup);
-      SlackUtil.postMessage(SLACK_CHANNELS.preview, slackPreviewMessage);
+      this.slackClient.addReaction(slackEvent, SLACK_REACTIONS.thumbsup);
+      this.postMessage(SLACK_CHANNELS.preview, slackPreviewMessage);
     } else {
-      SlackUtil.addReaction(slackEvent, SLACK_REACTIONS.thumbsdown);
+      this.slackClient.addReaction(slackEvent, SLACK_REACTIONS.thumbsdown);
     }
 
     // store in sheet
     this.dajareService.store(dajare);
+  }
+
+  postMessage(channelName: string, message: string): void {
+    const channel:
+      | SlackChannelModel
+      | undefined = this.slackChannelRepository.findByName(channelName);
+
+    // return if cannot post
+    if (channel == undefined) {
+      return;
+    }
+    if (!channel.getPostable()) {
+      return;
+    }
+
+    // post
+    this.slackClient.postMessage(channel, message);
+  }
+
+  logging(
+    message: string,
+    level: "DEBUG" | "INFO" | "WARN" | "ERROR" = "INFO"
+  ): void {
+    this.postMessage(SLACK_CHANNELS.log, `${level}: ${message}`);
+    LogUtil.logging(message, level);
   }
 }

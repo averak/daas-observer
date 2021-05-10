@@ -1,6 +1,5 @@
 import { AuthorModel } from "../model";
 import { EnvService } from "../service";
-import { LogUtil } from "../util";
 
 interface postParams {
   ok: boolean;
@@ -37,7 +36,6 @@ export class AuthorRepository {
         },
       });
     } catch (e) {
-      LogUtil.logging("failed to fetch user list", "WARN");
       return result;
     }
 

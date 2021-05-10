@@ -1,5 +1,6 @@
 import { AuthorModel } from "../model";
 import { AuthorRepository } from "../repository";
+import { LogUtil } from "../util";
 
 export class AuthorService {
   private authorRepository: AuthorRepository;
@@ -11,8 +12,10 @@ export class AuthorService {
   findById(id: string): AuthorModel | undefined {
     if (this.exists(id)) {
       return this.authorRepository.findById(id);
+    } else {
+      LogUtil.logging(`cannot find user`, "WARN");
+      return undefined;
     }
-    return undefined;
   }
 
   exists(id: string): boolean {
