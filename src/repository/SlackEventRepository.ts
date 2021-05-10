@@ -1,10 +1,10 @@
 import { SlackEventModel } from "../model";
-import { EVENT_SHEET_NAME } from "../config";
+import { SHEET_NAME } from "../config";
 import { AbstractRepository } from "./AbstractRepository";
 
 export class SlackEventRepository extends AbstractRepository {
   onInit(): void {
-    this.loadSheet(EVENT_SHEET_NAME);
+    this.loadSheet(SHEET_NAME.slack_event);
   }
 
   store(slackEvent: SlackEventModel): void {

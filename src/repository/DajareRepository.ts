@@ -1,10 +1,10 @@
 import { DajareModel } from "../model";
-import { DAJARE_SHEET_NAME } from "../config";
+import { SHEET_NAME } from "../config";
 import { AbstractRepository } from "./AbstractRepository";
 
 export class DajareRepository extends AbstractRepository {
   onInit(): void {
-    this.loadSheet(DAJARE_SHEET_NAME);
+    this.loadSheet(SHEET_NAME.dajare);
   }
 
   store(dajare: DajareModel): void {

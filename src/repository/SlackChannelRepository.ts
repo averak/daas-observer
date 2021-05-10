@@ -1,11 +1,11 @@
 import { SlackChannelModel } from "../model";
-import { CHANNEL_SHEET_NAME } from "../config";
+import { SHEET_NAME } from "../config";
 
 import { AbstractRepository } from "./AbstractRepository";
 
 export class SlackChannelRepository extends AbstractRepository {
   onInit(): void {
-    this.loadSheet(CHANNEL_SHEET_NAME);
+    this.loadSheet(SHEET_NAME.slack_channel);
   }
 
   findById(id: string): SlackChannelModel | undefined {

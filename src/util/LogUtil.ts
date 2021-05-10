@@ -1,9 +1,9 @@
 import { SlackUtil } from "./SlackUtil";
-import { LOG_CHANNEL_NAME, LOG_SHEET_NAME } from "../config";
+import { LOG_CHANNEL_NAME, SHEET_NAME } from "../config";
 
 // load log sheet
 const sheetApp = SpreadsheetApp.getActive();
-const sheet = sheetApp.getSheetByName(LOG_SHEET_NAME);
+const sheet = sheetApp.getSheetByName(SHEET_NAME.log);
 
 export class LogUtil {
   static logging(

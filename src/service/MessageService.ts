@@ -1,5 +1,5 @@
 import { DajareModel } from "../model";
-import { POST_CONFIG_SHEET_NAME } from "../config";
+import { SHEET_NAME } from "../config";
 
 export class MessageService {
   private sheet: GoogleAppsScript.Spreadsheet.Sheet | null;
@@ -10,7 +10,7 @@ export class MessageService {
 
   constructor() {
     const sheetApp = SpreadsheetApp.getActive();
-    this.sheet = sheetApp.getSheetByName(POST_CONFIG_SHEET_NAME);
+    this.sheet = sheetApp.getSheetByName(SHEET_NAME.post_config);
 
     this.JUDGE_TWEET = this.sheet?.getRange("B3").getValue() as string;
     this.RANKING_TWEET = this.sheet?.getRange("B10").getValue() as string;

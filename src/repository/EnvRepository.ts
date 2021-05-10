@@ -1,10 +1,10 @@
 import { EnvModel } from "../model";
-import { ENV_SHEET_NAME } from "../config";
+import { SHEET_NAME } from "../config";
 import { AbstractRepository } from "./AbstractRepository";
 
 export class EnvRepository extends AbstractRepository {
   onInit(): void {
-    this.loadSheet(ENV_SHEET_NAME);
+    this.loadSheet(SHEET_NAME.env);
   }
 
   findAll(): EnvModel[] {
