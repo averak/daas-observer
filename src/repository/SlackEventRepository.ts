@@ -54,4 +54,14 @@ export class SlackEventRepository extends AbstractRepository {
 
     return result;
   }
+
+  exists(slackEvent: SlackEventModel): boolean {
+    const slackEventList: SlackEventModel[] = this.findAll();
+    for (let i = 0; i < slackEventList.length; i++) {
+      if (slackEvent.equals(slackEventList[i])) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

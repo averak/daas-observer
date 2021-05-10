@@ -4,7 +4,11 @@ import {
   AuthorModel,
   SlackEventModel,
 } from "../model";
-import { SlackChannelRepository, AuthorRepository } from "../repository";
+import {
+  SlackChannelRepository,
+  SlackEventRepository,
+  AuthorRepository,
+} from "../repository";
 import { DajareService } from "../service";
 import { SlackClient } from "../client";
 import { SLACK_CHANNELS, SLACK_REACTIONS } from "../config";
@@ -12,12 +16,14 @@ import { LogUtil, BuildMessageUtil } from "../util";
 
 export class SlackService {
   private slackChannelRepository: SlackChannelRepository;
+  private slackEventRepository: SlackEventRepository;
   private authorRepository: AuthorRepository;
   private slackClient: SlackClient;
   private dajareService: DajareService;
 
   constructor() {
     this.slackChannelRepository = new SlackChannelRepository();
+    this.slackEventRepository = new SlackEventRepository();
     this.authorRepository = new AuthorRepository();
     this.slackClient = new SlackClient();
     this.dajareService = new DajareService();
@@ -27,6 +33,11 @@ export class SlackService {
     // text filtering
     const regex = RegExp("ERROR");
     if (regex.exec(slackEvent.getMessage())) {
+      return true;
+    }
+
+    // ignore already received event
+    if (this.slackEventRepository.exists(slackEvent)) {
       return true;
     }
 
@@ -61,6 +72,9 @@ export class SlackService {
   }
 
   receiveMessage(slackEvent: SlackEventModel): void {
+    // store event
+    this.slackEventRepository.store(slackEvent);
+
     // fetch author
     const author: AuthorModel | undefined = this.authorRepository.findById(
       slackEvent.getUserId()

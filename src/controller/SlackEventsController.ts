@@ -1,5 +1,5 @@
 import { SlackEventModel } from "../model";
-import { SlackService, SlackEventService } from "../service";
+import { SlackService } from "../service";
 import { LogUtil } from "../util";
 
 interface PostRequest {
@@ -17,11 +17,9 @@ interface PostRequest {
 
 export class SlackEventsController {
   private slackService: SlackService;
-  private slackEventService: SlackEventService;
 
   constructor() {
     this.slackService = new SlackService();
-    this.slackEventService = new SlackEventService();
   }
 
   receiveEvent(
@@ -38,12 +36,6 @@ export class SlackEventsController {
     slackEvent.setMessage(params.event.text);
     slackEvent.setTimestamp(params.event.ts);
 
-    // ignore already received request
-    if (this.slackEventService.exists(slackEvent)) {
-      LogUtil.logging("this event is already received", "WARN");
-      return result;
-    }
-
     // control slack slackEvent
     if (slackEvent.getType() == "url_verification") {
       // Slack slackEvents API verification
@@ -57,7 +49,6 @@ export class SlackEventsController {
       }
 
       // action
-      this.slackEventService.store(slackEvent);
       this.slackService.receiveMessage(slackEvent);
     }
 
