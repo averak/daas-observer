@@ -30,7 +30,7 @@ export class DajareService {
   }
 
   judgeDajare(dajare: DajareModel): DajareModel {
-    dajare = this.preprocessing(dajare);
+    dajare = this.preprocessing(dajare, "kana");
     const response = UrlFetchApp.fetch(
       `${DAJARE_API_URL}/judge/?dajare=${dajare.getText()}`
     );
@@ -44,7 +44,7 @@ export class DajareService {
   }
 
   evalDajare(dajare: DajareModel): DajareModel {
-    dajare = this.preprocessing(dajare);
+    dajare = this.preprocessing(dajare, "kana");
     const response = UrlFetchApp.fetch(
       `${DAJARE_API_URL}/eval/?dajare=${dajare.getText()}`
     );
@@ -58,6 +58,7 @@ export class DajareService {
   }
 
   readingDajare(dajare: DajareModel): DajareModel {
+    dajare = this.preprocessing(dajare, "kana");
     const response = UrlFetchApp.fetch(
       `${DAJARE_API_URL}/reading/?dajare=${dajare.getText()}`
     );
@@ -76,7 +77,7 @@ export class DajareService {
   }
 
   store(dajare: DajareModel): void {
-    dajare = this.preprocessing(dajare);
+    dajare = this.preprocessing(dajare, "origin");
     this.dajareRepository.store(dajare);
   }
 
@@ -111,9 +112,18 @@ export class DajareService {
     return result;
   }
 
-  private preprocessing(dajare: DajareModel): DajareModel {
-    // "{AAA|BBB}" -> "BBB"
-    dajare.setText(dajare.getText().replace(/\{([^{|}]+)\|([^{|}]+)\}/g, "$2"));
+  private preprocessing(
+    dajare: DajareModel,
+    replaceMode: "kana" | "origin"
+  ): DajareModel {
+    // "{AAA|BBB}" -> "AAA" or "BBB"
+    if (replaceMode == "kana") {
+      dajare.setText(
+        dajare.getText().replace(/\{([^{|}]+)\|([^{|}]+)\}/g, "$2")
+      );
+    } else {
+      dajare.getText().replace(/\{([^{|}]+)\|([^{|}]+)\}/g, "$1");
+    }
     return dajare;
   }
 }
