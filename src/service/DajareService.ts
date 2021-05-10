@@ -30,6 +30,7 @@ export class DajareService {
   }
 
   judgeDajare(dajare: DajareModel): DajareModel {
+    dajare = this.preprocessing(dajare);
     const response = UrlFetchApp.fetch(
       `${DAJARE_API_URL}/judge/?dajare=${dajare.getText()}`
     );
@@ -43,6 +44,7 @@ export class DajareService {
   }
 
   evalDajare(dajare: DajareModel): DajareModel {
+    dajare = this.preprocessing(dajare);
     const response = UrlFetchApp.fetch(
       `${DAJARE_API_URL}/eval/?dajare=${dajare.getText()}`
     );
@@ -83,6 +85,13 @@ export class DajareService {
   }
 
   store(dajare: DajareModel): void {
+    dajare = this.preprocessing(dajare);
     this.dajareRepository.store(dajare);
+  }
+
+  private preprocessing(dajare: DajareModel): DajareModel {
+    // "{AAA|BBB}" -> "BBB"
+    dajare.setText(dajare.getText().replace(/\{([^{|}]+)\|([^{|}]+)\}/g, "$2"));
+    return dajare;
   }
 }
