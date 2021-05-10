@@ -4,6 +4,7 @@ export class DajareModel {
   private isDajare!: boolean;
   private score!: number;
   private authorName!: string;
+  private date!: Date;
 
   constructor(text: string) {
     this.text = text;
@@ -51,6 +52,14 @@ export class DajareModel {
 
   getAuthorName(): string {
     return this.authorName;
+  }
+
+  setDate(date: Date): void {
+    this.date = date;
+  }
+
+  getDate(): Date {
+    return this.date;
   }
 
   equals(dajare: DajareModel): boolean {

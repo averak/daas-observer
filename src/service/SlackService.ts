@@ -87,6 +87,7 @@ export class SlackService {
     // create dajare object
     let dajare = new DajareModel(slackEvent.getMessage());
     dajare.setAuthorName(author.getName());
+    dajare.setDate(new Date());
     // judge & eval
     try {
       dajare = this.dajareService.judgeDajare(dajare);

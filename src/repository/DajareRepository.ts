@@ -9,7 +9,7 @@ export class DajareRepository extends AbstractRepository {
 
   store(dajare: DajareModel): void {
     this.sheet?.appendRow([
-      new Date(),
+      dajare.getDate(),
       dajare.getText(),
       dajare.getScore(),
       dajare.getIsDajare(),
@@ -21,7 +21,7 @@ export class DajareRepository extends AbstractRepository {
     const result: DajareModel[] = [];
 
     // range settings
-    const START_COL = 2;
+    const START_COL = 1;
     const START_ROW = 2;
     const END_COL = 5;
     const END_ROW = this.sheet?.getLastRow() || START_ROW;
@@ -43,10 +43,11 @@ export class DajareRepository extends AbstractRepository {
         continue;
       }
 
-      const dajare = new DajareModel(cells[i][0]);
-      dajare.setScore(Number(cells[i][1]));
-      dajare.setIsDajare(Boolean(cells[i][2]));
-      dajare.setAuthorName(cells[i][3]);
+      const dajare = new DajareModel(cells[i][1]);
+      dajare.setScore(Number(cells[i][2]));
+      dajare.setIsDajare(Boolean(cells[i][3]));
+      dajare.setAuthorName(cells[i][4]);
+      dajare.setDate(new Date(cells[i][0]));
       result.push(dajare);
     }
 
