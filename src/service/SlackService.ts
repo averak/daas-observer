@@ -6,11 +6,7 @@ import {
 } from "../model";
 import { SlackChannelRepository } from "../repository";
 import { DajareService, MessageService, AuthorService } from "../service";
-import {
-  SLACK_CHANNELS,
-  THUMBSUP_REACTION_NAME,
-  THUMBSDOWN_REACTION_NAME,
-} from "../config";
+import { SLACK_CHANNELS, SLACK_REACTIONS } from "../config";
 import { SlackUtil, LogUtil } from "../util";
 
 export class SlackService {
@@ -82,10 +78,10 @@ export class SlackService {
     // post message
     if (dajare.getIsDajare()) {
       const slackPreviewMessage = this.messageService.makeSlackPreview(dajare);
-      SlackUtil.addReaction(slackEvent, THUMBSUP_REACTION_NAME);
+      SlackUtil.addReaction(slackEvent, SLACK_REACTIONS.thumbsup);
       SlackUtil.postMessage(SLACK_CHANNELS.preview, slackPreviewMessage);
     } else {
-      SlackUtil.addReaction(slackEvent, THUMBSDOWN_REACTION_NAME);
+      SlackUtil.addReaction(slackEvent, SLACK_REACTIONS.thumbsdown);
     }
 
     // store in sheet

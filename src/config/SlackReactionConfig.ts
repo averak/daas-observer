@@ -1,2 +1,4 @@
-export const THUMBSUP_REACTION_NAME = "thumbsup";
-export const THUMBSDOWN_REACTION_NAME = "thumbsdown";
+export const SLACK_REACTIONS = {
+  thumbsup: "thumbsup",
+  thumbsdown: "thumbsdown",
+};
