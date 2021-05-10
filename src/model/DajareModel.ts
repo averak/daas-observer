@@ -35,11 +35,7 @@ export class DajareModel {
   }
 
   setScore(score: number): void {
-    if (score >= 1.0 && score <= 5.0) {
-      this.score = score;
-    } else {
-      throw new Error("score should be between 1 and 5.");
-    }
+    this.score = score;
   }
 
   getScore(): number {
@@ -64,5 +60,16 @@ export class DajareModel {
 
   equals(dajare: DajareModel): boolean {
     return dajare.getText() == this.getText();
+  }
+
+  clone(): DajareModel {
+    const result = new DajareModel(this.getText());
+    result.setReading(this.getReading());
+    result.setIsDajare(this.getIsDajare());
+    result.setScore(this.getScore());
+    result.setAuthorName(this.getAuthorName());
+    result.setDate(this.getDate());
+
+    return result;
   }
 }

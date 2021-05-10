@@ -90,9 +90,10 @@ export class SlackService {
     dajare.setDate(new Date());
     // judge & eval
     try {
-      dajare.setIsDajare(this.dajareService.judgeDajare(dajare));
-      dajare.setScore(this.dajareService.evalDajare(dajare));
-      dajare.setReading(this.dajareService.readingDajare(dajare));
+      const processed_dajare = this.dajareService.preprocessing(dajare, "kana");
+      dajare.setIsDajare(this.dajareService.judgeDajare(processed_dajare));
+      dajare.setScore(this.dajareService.evalDajare(processed_dajare));
+      dajare.setReading(this.dajareService.readingDajare(processed_dajare));
     } catch (e) {
       this.logging("failed to connect DaaS", "ERROR");
       return;
@@ -100,13 +101,19 @@ export class SlackService {
 
     // post message
     if (dajare.getIsDajare()) {
+      const processed_dajare = this.dajareService.preprocessing(
+        dajare,
+        "origin"
+      );
       // add reaction
       this.slackClient.addReaction(slackEvent, SLACK_REACTIONS.thumbsup);
       // post result
-      const slackPreviewMessage = BuildMessageUtil.buildSlackPreview(dajare);
+      const slackPreviewMessage = BuildMessageUtil.buildSlackPreview(
+        processed_dajare
+      );
       this.postMessage(SLACK_CHANNELS.preview, slackPreviewMessage);
       // store in sheet
-      this.dajareService.store(dajare);
+      this.dajareService.store(processed_dajare);
     } else {
       // add reaction
       this.slackClient.addReaction(slackEvent, SLACK_REACTIONS.thumbsdown);

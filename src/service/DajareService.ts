@@ -30,7 +30,6 @@ export class DajareService {
   }
 
   judgeDajare(dajare: DajareModel): boolean {
-    dajare = this.preprocessing(dajare, "kana");
     const response = UrlFetchApp.fetch(
       `${DAJARE_API_URL}/judge/?dajare=${dajare.getText()}`
     );
@@ -43,7 +42,6 @@ export class DajareService {
   }
 
   evalDajare(dajare: DajareModel): number {
-    dajare = this.preprocessing(dajare, "kana");
     const response = UrlFetchApp.fetch(
       `${DAJARE_API_URL}/eval/?dajare=${dajare.getText()}`
     );
@@ -56,7 +54,6 @@ export class DajareService {
   }
 
   readingDajare(dajare: DajareModel): string {
-    dajare = this.preprocessing(dajare, "kana");
     const response = UrlFetchApp.fetch(
       `${DAJARE_API_URL}/reading/?dajare=${dajare.getText()}`
     );
@@ -68,13 +65,32 @@ export class DajareService {
     return jsonData.reading;
   }
 
+  preprocessing(
+    dajare: DajareModel,
+    replaceMode: "kana" | "origin"
+  ): DajareModel {
+    const result = dajare.clone();
+
+    // "{AAA|BBB}" -> "AAA" or "BBB"
+    if (replaceMode == "kana") {
+      result.setText(
+        result.getText().replace(/\{([^{|}]+)\|([^{|}]+)\}/g, "$2")
+      );
+    } else {
+      result.setText(
+        result.getText().replace(/\{([^{|}]+)\|([^{|}]+)\}/g, "$1")
+      );
+    }
+
+    return result;
+  }
+
   fetchDajare(num: number): DajareModel[] {
     const result = this.dajareRepository.findByIsDajare(true);
     return result.slice(0, num);
   }
 
   store(dajare: DajareModel): void {
-    dajare = this.preprocessing(dajare, "origin");
     this.dajareRepository.store(dajare);
   }
 
@@ -107,20 +123,5 @@ export class DajareService {
     });
 
     return result;
-  }
-
-  private preprocessing(
-    dajare: DajareModel,
-    replaceMode: "kana" | "origin"
-  ): DajareModel {
-    // "{AAA|BBB}" -> "AAA" or "BBB"
-    if (replaceMode == "kana") {
-      dajare.setText(
-        dajare.getText().replace(/\{([^{|}]+)\|([^{|}]+)\}/g, "$2")
-      );
-    } else {
-      dajare.getText().replace(/\{([^{|}]+)\|([^{|}]+)\}/g, "$1");
-    }
-    return dajare;
   }
 }
