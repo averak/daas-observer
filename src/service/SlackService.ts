@@ -100,15 +100,17 @@ export class SlackService {
 
     // post message
     if (dajare.getIsDajare()) {
-      const slackPreviewMessage = BuildMessageUtil.buildSlackPreview(dajare);
+      // add reaction
       this.slackClient.addReaction(slackEvent, SLACK_REACTIONS.thumbsup);
+      // post result
+      const slackPreviewMessage = BuildMessageUtil.buildSlackPreview(dajare);
       this.postMessage(SLACK_CHANNELS.preview, slackPreviewMessage);
+      // store in sheet
+      this.dajareService.store(dajare);
     } else {
+      // add reaction
       this.slackClient.addReaction(slackEvent, SLACK_REACTIONS.thumbsdown);
     }
-
-    // store in sheet
-    this.dajareService.store(dajare);
   }
 
   postMessage(channelName: string, message: string): void {
