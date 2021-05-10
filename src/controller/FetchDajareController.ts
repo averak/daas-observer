@@ -7,7 +7,7 @@ interface GetRequest {
 }
 
 interface FetchDajareResponse {
-  status: "OK";
+  status: "OK" | "NG";
   num: number;
   dajare: DajareModel[];
 }

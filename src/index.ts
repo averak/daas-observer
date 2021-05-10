@@ -1,5 +1,9 @@
 import { LogUtil } from "./util";
-import { SlackEventsController, FetchDajareController } from "./controller";
+import {
+  SlackEventsController,
+  FetchDajareController,
+  FetchRankingController,
+} from "./controller";
 
 declare const global: {
   [x: string]: any;
@@ -8,6 +12,7 @@ declare const global: {
 // api controllers
 const slackEventsController = new SlackEventsController();
 const fetchDajareController = new FetchDajareController();
+const fetchRankingController = new FetchRankingController();
 
 // get paramater
 interface GetRequest {
@@ -28,6 +33,10 @@ global.doGet = (
 
     case "fetchDajare":
       result = fetchDajareController.fetchDajare(e);
+      break;
+
+    case "ranking":
+      result = fetchRankingController.fetchRanking(e);
       break;
 
     default:
