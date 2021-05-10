@@ -29,7 +29,7 @@ export class DajareService {
     this.dajareRepository = new DajareRepository();
   }
 
-  judgeDajare(dajare: DajareModel): DajareModel {
+  judgeDajare(dajare: DajareModel): boolean {
     dajare = this.preprocessing(dajare, "kana");
     const response = UrlFetchApp.fetch(
       `${DAJARE_API_URL}/judge/?dajare=${dajare.getText()}`
@@ -38,12 +38,11 @@ export class DajareService {
     const jsonData: judgeResponse = JSON.parse(
       response.getContentText()
     ) as judgeResponse;
-    dajare.setIsDajare(jsonData.is_dajare);
 
-    return dajare;
+    return jsonData.is_dajare;
   }
 
-  evalDajare(dajare: DajareModel): DajareModel {
+  evalDajare(dajare: DajareModel): number {
     dajare = this.preprocessing(dajare, "kana");
     const response = UrlFetchApp.fetch(
       `${DAJARE_API_URL}/eval/?dajare=${dajare.getText()}`
@@ -52,12 +51,11 @@ export class DajareService {
     const jsonData: evalResponse = JSON.parse(
       response.getContentText()
     ) as evalResponse;
-    dajare.setScore(jsonData.score);
 
-    return dajare;
+    return jsonData.score;
   }
 
-  readingDajare(dajare: DajareModel): DajareModel {
+  readingDajare(dajare: DajareModel): string {
     dajare = this.preprocessing(dajare, "kana");
     const response = UrlFetchApp.fetch(
       `${DAJARE_API_URL}/reading/?dajare=${dajare.getText()}`
@@ -66,9 +64,8 @@ export class DajareService {
     const jsonData: readingResponse = JSON.parse(
       response.getContentText()
     ) as readingResponse;
-    dajare.setReading(jsonData.reading);
 
-    return dajare;
+    return jsonData.reading;
   }
 
   fetchDajare(num: number): DajareModel[] {

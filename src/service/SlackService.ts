@@ -85,14 +85,14 @@ export class SlackService {
     }
 
     // create dajare object
-    let dajare = new DajareModel(slackEvent.getMessage());
+    const dajare = new DajareModel(slackEvent.getMessage());
     dajare.setAuthorName(author.getName());
     dajare.setDate(new Date());
     // judge & eval
     try {
-      dajare = this.dajareService.judgeDajare(dajare);
-      dajare = this.dajareService.evalDajare(dajare);
-      dajare = this.dajareService.readingDajare(dajare);
+      dajare.setIsDajare(this.dajareService.judgeDajare(dajare));
+      dajare.setScore(this.dajareService.evalDajare(dajare));
+      dajare.setReading(this.dajareService.readingDajare(dajare));
     } catch (e) {
       this.logging("failed to connect DaaS", "ERROR");
       return;
