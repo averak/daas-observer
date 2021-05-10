@@ -53,4 +53,10 @@ export class DajareRepository extends AbstractRepository {
 
     return result;
   }
+
+  findByIsDajare(isDajare: boolean): DajareModel[] {
+    return this.findAll().filter((dajare) => {
+      return isDajare == dajare.getIsDajare();
+    });
+  }
 }

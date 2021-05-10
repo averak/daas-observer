@@ -30,10 +30,7 @@ export class RankingService {
     const result: DajareModel[] = [];
     const today = new Date();
 
-    this.dajareRepository.findAll().forEach((dajare) => {
-      if (!dajare.getIsDajare()) {
-        return;
-      }
+    this.dajareRepository.findByIsDajare(true).forEach((dajare) => {
       if ((today.getTime() - dajare.getDate().getTime()) / 86400000 < days) {
         result.push(dajare);
       }
