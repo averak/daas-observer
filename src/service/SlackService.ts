@@ -7,9 +7,7 @@ import {
 import { SlackChannelRepository } from "../repository";
 import { DajareService, MessageService, AuthorService } from "../service";
 import {
-  DAAS_CHANNEL_NAME,
-  TEST_CHANNEL_NAME,
-  PREVIEW_CHANNEL_NAME,
+  SLACK_CHANNELS,
   THUMBSUP_REACTION_NAME,
   THUMBSDOWN_REACTION_NAME,
 } from "../config";
@@ -45,8 +43,8 @@ export class SlackService {
       return true;
     }
     if (
-      channel.getName() != DAAS_CHANNEL_NAME &&
-      channel.getName() != TEST_CHANNEL_NAME
+      channel.getName() != SLACK_CHANNELS.daas &&
+      channel.getName() != SLACK_CHANNELS.test
     ) {
       return true;
     }
@@ -85,7 +83,7 @@ export class SlackService {
     if (dajare.getIsDajare()) {
       const slackPreviewMessage = this.messageService.makeSlackPreview(dajare);
       SlackUtil.addReaction(slackEvent, THUMBSUP_REACTION_NAME);
-      SlackUtil.postMessage(PREVIEW_CHANNEL_NAME, slackPreviewMessage);
+      SlackUtil.postMessage(SLACK_CHANNELS.preview, slackPreviewMessage);
     } else {
       SlackUtil.addReaction(slackEvent, THUMBSDOWN_REACTION_NAME);
     }

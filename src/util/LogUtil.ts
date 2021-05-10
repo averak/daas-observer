@@ -1,5 +1,5 @@
 import { SlackUtil } from "./SlackUtil";
-import { LOG_CHANNEL_NAME, SHEET_NAME } from "../config";
+import { SLACK_CHANNELS, SHEET_NAME } from "../config";
 
 // load log sheet
 const sheetApp = SpreadsheetApp.getActive();
@@ -11,7 +11,7 @@ export class LogUtil {
     level: "DEBUG" | "INFO" | "WARN" | "ERROR" = "INFO"
   ): void {
     if (level == "ERROR") {
-      SlackUtil.postMessage(LOG_CHANNEL_NAME, `${level}: ${message}`);
+      SlackUtil.postMessage(SLACK_CHANNELS.log, `${level}: ${message}`);
     }
     sheet?.appendRow([new Date(), level, message]);
   }
