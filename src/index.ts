@@ -1,9 +1,5 @@
 import { LogUtil } from "./util";
-import {
-  SlackEventsController,
-  FetchDajareController,
-  FetchRankingController,
-} from "./controller";
+import { SlackEventsController, FetchDajareController } from "./api";
 
 declare const global: {
   [x: string]: any;
@@ -12,7 +8,6 @@ declare const global: {
 // api controllers
 const slackEventsController = new SlackEventsController();
 const fetchDajareController = new FetchDajareController();
-const fetchRankingController = new FetchRankingController();
 
 // get paramater
 interface GetRequest {
@@ -36,7 +31,7 @@ global.doGet = (
       break;
 
     case "ranking":
-      result = fetchRankingController.fetchRanking(e);
+      result = fetchDajareController.fetchRanking(e);
       break;
 
     default:
@@ -51,5 +46,5 @@ global.doGet = (
 global.doPost = (
   e: GoogleAppsScript.Events.DoPost
 ): GoogleAppsScript.Content.TextOutput => {
-  return slackEventsController.receiveEvent(e);
+  return slackEventsController.slackEventSubmit(e);
 };

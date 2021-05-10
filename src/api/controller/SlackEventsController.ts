@@ -1,19 +1,8 @@
-import { SlackEventModel } from "../model";
-import { SlackService } from "../service";
-import { LogUtil } from "../util";
+import { SlackEventModel } from "../../model";
+import { SlackService } from "../../service";
+import { LogUtil } from "../../util";
 
-interface PostRequest {
-  type: string;
-  challenge: string;
-  event_id: string;
-  event: {
-    type: string;
-    channel: string;
-    user: string;
-    text: string;
-    ts: string;
-  };
-}
+import { SlackEventSubmitRequest } from "../request";
 
 export class SlackEventsController {
   private slackService: SlackService;
@@ -22,10 +11,10 @@ export class SlackEventsController {
     this.slackService = new SlackService();
   }
 
-  receiveEvent(
+  slackEventSubmit(
     e: GoogleAppsScript.Events.DoPost
   ): GoogleAppsScript.Content.TextOutput {
-    const params: PostRequest = JSON.parse(e.postData.contents) as PostRequest;
+    const params = JSON.parse(e.postData.contents) as SlackEventSubmitRequest;
     const result = ContentService.createTextOutput(params.challenge);
 
     // create event object
