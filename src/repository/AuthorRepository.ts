@@ -20,7 +20,7 @@ export class AuthorRepository {
 
   constructor() {
     this.envService = new EnvService();
-    this.updateAuthors();
+    this.authors = this.findAll();
   }
 
   findAll(): AuthorModel[] {
@@ -50,10 +50,6 @@ export class AuthorRepository {
     });
 
     return result;
-  }
-
-  updateAuthors(): void {
-    this.authors = this.findAll();
   }
 
   findById(id: string): AuthorModel | undefined {

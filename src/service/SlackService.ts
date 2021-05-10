@@ -4,25 +4,23 @@ import {
   AuthorModel,
   SlackEventModel,
 } from "../model";
-import { SlackChannelRepository } from "../repository";
-import { DajareService, MessageService, AuthorService } from "../service";
+import { SlackChannelRepository, AuthorRepository } from "../repository";
+import { DajareService } from "../service";
 import { SlackClient } from "../client";
 import { SLACK_CHANNELS, SLACK_REACTIONS } from "../config";
-import { LogUtil } from "../util";
+import { LogUtil, BuildMessageUtil } from "../util";
 
 export class SlackService {
   private slackChannelRepository: SlackChannelRepository;
+  private authorRepository: AuthorRepository;
   private slackClient: SlackClient;
   private dajareService: DajareService;
-  private messageService: MessageService;
-  private authorService: AuthorService;
 
   constructor() {
     this.slackChannelRepository = new SlackChannelRepository();
+    this.authorRepository = new AuthorRepository();
     this.slackClient = new SlackClient();
     this.dajareService = new DajareService();
-    this.messageService = new MessageService();
-    this.authorService = new AuthorService();
   }
 
   slackEventFilter(slackEvent: SlackEventModel): boolean {
@@ -49,7 +47,7 @@ export class SlackService {
     }
 
     // author filtering
-    const author: AuthorModel | undefined = this.authorService.findById(
+    const author: AuthorModel | undefined = this.authorRepository.findById(
       slackEvent.getUserId()
     );
     if (author == undefined) {
@@ -64,7 +62,7 @@ export class SlackService {
 
   receiveMessage(slackEvent: SlackEventModel): void {
     // fetch author
-    const author: AuthorModel | undefined = this.authorService.findById(
+    const author: AuthorModel | undefined = this.authorRepository.findById(
       slackEvent.getUserId()
     );
     if (author == undefined) {
@@ -80,7 +78,7 @@ export class SlackService {
 
     // post message
     if (dajare.getIsDajare()) {
-      const slackPreviewMessage = this.messageService.makeSlackPreview(dajare);
+      const slackPreviewMessage = BuildMessageUtil.buildSlackPreview(dajare);
       this.slackClient.addReaction(slackEvent, SLACK_REACTIONS.thumbsup);
       this.postMessage(SLACK_CHANNELS.preview, slackPreviewMessage);
     } else {
