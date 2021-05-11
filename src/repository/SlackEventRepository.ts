@@ -64,4 +64,14 @@ export class SlackEventRepository extends AbstractRepository {
     }
     return false;
   }
+
+  clearAll(): void {
+    // range settings
+    const START_COL = 1;
+    const START_ROW = 2;
+    const END_COL = 6;
+    const END_ROW = this.sheet?.getLastRow() || START_ROW;
+
+    this.sheet?.getRange(START_ROW, START_COL, END_ROW, END_COL).clearContent();
+  }
 }

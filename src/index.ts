@@ -1,5 +1,6 @@
 import { LogUtil } from "./util";
 import { SlackEventsController, FetchDajareController } from "./api";
+import { SlackEventRepository } from "./repository";
 
 declare const global: {
   [x: string]: any;
@@ -47,4 +48,31 @@ global.doPost = (
   e: GoogleAppsScript.Events.DoPost
 ): GoogleAppsScript.Content.TextOutput => {
   return slackEventsController.slackEventSubmit(e);
+};
+
+// clear sheet button
+global.clearLog = () => {
+  // yesno dialog
+  const question: string = Browser.msgBox(
+    "ログを削除しますか？",
+    Browser.Buttons.YES_NO_CANCEL
+  );
+
+  if (question == "yes") {
+    LogUtil.clearAll();
+    Browser.msgBox("ログを削除しました");
+  }
+};
+global.clearEventLog = () => {
+  // yesno dialog
+  const question: string = Browser.msgBox(
+    "イベントログを削除しますか？",
+    Browser.Buttons.YES_NO_CANCEL
+  );
+
+  if (question == "yes") {
+    const slackEventRepository = new SlackEventRepository();
+    slackEventRepository.clearAll();
+    Browser.msgBox("イベントログを削除しました");
+  }
 };
