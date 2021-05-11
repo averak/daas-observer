@@ -2,7 +2,8 @@ import { SlackEventModel } from "../../model";
 import { SlackService } from "../../service";
 import { LogUtil } from "../../util";
 
-import { SlackEventSubmitRequest } from "../request";
+import { SlackMessageEventRequest, SlackSlashCommandRequest } from "../request";
+import { SlackSlashCommandResponse } from "../response";
 
 export class SlackEventsController {
   private slackService: SlackService;
@@ -11,19 +12,20 @@ export class SlackEventsController {
     this.slackService = new SlackService();
   }
 
-  slackEventSubmit(
+  slackMessageEvent(
     e: GoogleAppsScript.Events.DoPost
   ): GoogleAppsScript.Content.TextOutput {
-    const params = JSON.parse(e.postData.contents) as SlackEventSubmitRequest;
+    // POST body
+    const params = JSON.parse(
+      JSON.stringify(e.postData.contents)
+    ) as SlackMessageEventRequest;
+    // json response
     const result = ContentService.createTextOutput(params.challenge);
 
     // create event object
-    const slackEvent = new SlackEventModel(params.event_id);
+    const slackEvent = new SlackEventModel();
+    slackEvent.setId(params.event_id);
     slackEvent.setType(params.type);
-    slackEvent.setChannelId(params.event.channel);
-    slackEvent.setUserId(params.event.user);
-    slackEvent.setMessage(params.event.text);
-    slackEvent.setTimestamp(params.event.ts);
 
     // control slack slackEvent
     if (slackEvent.getType() == "url_verification") {
@@ -31,6 +33,12 @@ export class SlackEventsController {
       return result;
     }
     if (slackEvent.getType() == "event_callback") {
+      // set slack event detail
+      slackEvent.setChannelId(params.event.channel);
+      slackEvent.setUserId(params.event.user);
+      slackEvent.setMessage(params.event.text);
+      slackEvent.setTimestamp(params.event.ts);
+
       // event filtering
       if (this.slackService.slackEventFilter(slackEvent)) {
         LogUtil.logging("this event is not allowed", "WARN");
@@ -43,10 +51,47 @@ export class SlackEventsController {
 
     // logging
     LogUtil.logging(
-      `catch slack slackEvent {type: ${slackEvent.getType()}, slackEvent_id: ${slackEvent.getId()}}`,
+      `catch slack event {type: ${slackEvent.getType()}, slackEvent_id: ${slackEvent.getId()}}`,
       "INFO"
     );
 
     return result;
+  }
+
+  slackSlashCommand(
+    e: GoogleAppsScript.Events.DoPost,
+    command: string
+  ): GoogleAppsScript.Content.TextOutput {
+    // POST body
+    const params = JSON.parse(
+      JSON.stringify(e.parameter)
+    ) as SlackSlashCommandRequest;
+    // json response
+    const result: SlackSlashCommandResponse = {
+      text: "processing...",
+      response_type: "in_channel",
+    };
+
+    // create event object
+    const slackEvent = new SlackEventModel();
+    slackEvent.setMessage(params.text);
+    slackEvent.setUserId(params.user_id);
+    slackEvent.setChannelId(params.channel_id);
+    slackEvent.setCommand(command);
+
+    // event filtering
+    if (this.slackService.slackEventFilter(slackEvent)) {
+      result.text = "this command cannot be used on this channel";
+    } else {
+      this.slackService.receiveSlashCommand(slackEvent);
+    }
+
+    // logging
+    LogUtil.logging(`catch slack slash command: ${command}`, "INFO");
+
+    const response = ContentService.createTextOutput();
+    response.setMimeType(ContentService.MimeType.JSON);
+    response.setContent(JSON.stringify(result));
+    return response;
   }
 }

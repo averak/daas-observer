@@ -10,9 +10,15 @@ declare const global: {
 const slackEventsController = new SlackEventsController();
 const fetchDajareController = new FetchDajareController();
 
-// get paramater
+// GET request paramater
 interface GetRequest {
-  action: string;
+  action: "dajare" | "ranking";
+}
+
+// POST request paramater
+interface PostRequest {
+  service: "slack" | "discord";
+  command: string;
 }
 
 global.doGet = (
@@ -23,11 +29,7 @@ global.doGet = (
   // routing
   const params: GetRequest = e.parameter as GetRequest;
   switch (params.action) {
-    case undefined:
-      result = ContentService.createTextOutput("action param is not specified");
-      break;
-
-    case "fetchDajare":
+    case "dajare":
       result = fetchDajareController.fetchDajare(e);
       break;
 
@@ -40,14 +42,37 @@ global.doGet = (
       break;
   }
 
-  LogUtil.logging("API called from browser", "INFO");
   return result;
 };
 
 global.doPost = (
   e: GoogleAppsScript.Events.DoPost
 ): GoogleAppsScript.Content.TextOutput => {
-  return slackEventsController.slackEventSubmit(e);
+  let result: GoogleAppsScript.Content.TextOutput;
+
+  // routing
+  const params: PostRequest = e.parameter as PostRequest;
+  switch (params.service) {
+    case "slack":
+      if (params.command == undefined) {
+        result = slackEventsController.slackMessageEvent(e);
+      } else {
+        result = slackEventsController.slackSlashCommand(e, params.command);
+      }
+      break;
+
+    case "discord":
+      LogUtil.logging("discord", "DEBUG");
+      result = ContentService.createTextOutput("service is not allowed");
+      break;
+
+    default:
+      LogUtil.logging("other", "DEBUG");
+      result = ContentService.createTextOutput("service is not allowed");
+      break;
+  }
+
+  return result;
 };
 
 // clear sheet button

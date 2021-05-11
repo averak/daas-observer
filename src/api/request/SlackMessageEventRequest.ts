@@ -1,4 +1,4 @@
-export interface SlackEventSubmitRequest {
+export interface SlackMessageEventRequest {
   type: string;
   challenge: string;
   event_id: string;

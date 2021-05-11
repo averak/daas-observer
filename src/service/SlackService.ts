@@ -10,7 +10,7 @@ import {
   AuthorRepository,
 } from "../repository";
 import { DajareService } from "../service";
-import { SlackClient } from "../client";
+import { SlackClient, TwitterClient } from "../client";
 import { SLACK_CHANNELS, SLACK_REACTIONS } from "../config";
 import { LogUtil, BuildMessageUtil } from "../util";
 
@@ -19,6 +19,7 @@ export class SlackService {
   private slackEventRepository: SlackEventRepository;
   private authorRepository: AuthorRepository;
   private slackClient: SlackClient;
+  private twitterClient: TwitterClient;
   private dajareService: DajareService;
 
   constructor() {
@@ -26,6 +27,7 @@ export class SlackService {
     this.slackEventRepository = new SlackEventRepository();
     this.authorRepository = new AuthorRepository();
     this.slackClient = new SlackClient();
+    this.twitterClient = new TwitterClient();
     this.dajareService = new DajareService();
   }
 
@@ -101,23 +103,83 @@ export class SlackService {
 
     // post message
     if (dajare.getIsDajare()) {
-      const processed_dajare = this.dajareService.preprocessing(
-        dajare,
-        "origin"
-      );
-      // add reaction
+      this.postResult(slackEvent, dajare);
       this.slackClient.addReaction(slackEvent, SLACK_REACTIONS.thumbsup);
-      // post result
-      const slackPreviewMessage = BuildMessageUtil.buildSlackPreview(
-        processed_dajare
-      );
-      this.postMessage(SLACK_CHANNELS.preview, slackPreviewMessage);
-      // store in sheet
-      this.dajareService.store(processed_dajare);
     } else {
-      // add reaction
       this.slackClient.addReaction(slackEvent, SLACK_REACTIONS.thumbsdown);
     }
+  }
+
+  receiveSlashCommand(slackEvent: SlackEventModel): void {
+    // fetch author
+    const author: AuthorModel | undefined = this.authorRepository.findById(
+      slackEvent.getUserId()
+    );
+    if (author == undefined) {
+      this.logging("cannot find author", "ERROR");
+      return;
+    }
+    // received channel
+    const channel = this.slackChannelRepository?.findById(
+      slackEvent.getChannelId()
+    );
+    if (channel == undefined) {
+      return;
+    }
+
+    // create dajare object
+    const dajare = new DajareModel(slackEvent.getMessage());
+    dajare.setAuthorName(author.getName());
+    dajare.setDate(new Date());
+    // judge & eval
+    try {
+      const processed_dajare = this.dajareService.preprocessing(dajare, "kana");
+      dajare.setIsDajare(this.dajareService.judgeDajare(processed_dajare));
+      dajare.setScore(this.dajareService.evalDajare(processed_dajare));
+      dajare.setReading(this.dajareService.readingDajare(processed_dajare));
+    } catch (e) {
+      this.logging("failed to connect DaaS", "ERROR");
+      return;
+    }
+
+    switch (slackEvent.getCommand()) {
+      case "force":
+        dajare.setIsDajare(true);
+        this.postResult(slackEvent, dajare);
+        this.postMessage(
+          channel.getName(),
+          `強制的に判定しました：${dajare.getText()}`
+        );
+        break;
+
+      case "info":
+        this.postMessage(
+          channel.getName(),
+          `text: ${dajare.getText()}\nscore: ${dajare.getScore()}\nreading: ${dajare.getReading()}`
+        );
+        break;
+
+      case "reading":
+        this.postMessage(channel.getName(), `reading: ${dajare.getReading()}`);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  private postResult(slackEvent: SlackEventModel, dajare: DajareModel): void {
+    dajare = this.dajareService.preprocessing(dajare, "origin");
+    // add reaction
+    this.slackClient.addReaction(slackEvent, SLACK_REACTIONS.thumbsup);
+    // build message
+    const slackPreviewMessage = BuildMessageUtil.buildSlackPreview(dajare);
+    const judgeTweetMessage = BuildMessageUtil.buildJudgeTweet(dajare);
+    // post result
+    this.postMessage(SLACK_CHANNELS.preview, slackPreviewMessage);
+    this.twitterClient.postMessage(judgeTweetMessage);
+    // store in sheet
+    this.dajareService.store(dajare);
   }
 
   postMessage(channelName: string, message: string): void {

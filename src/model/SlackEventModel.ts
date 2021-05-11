@@ -4,11 +4,8 @@ export class SlackEventModel {
   private channelId!: string;
   private userId!: string;
   private message!: string;
+  private command!: string;
   private timestamp!: string;
-
-  constructor(id: string) {
-    this.id = id;
-  }
 
   getId(): string {
     return this.id;
@@ -48,6 +45,14 @@ export class SlackEventModel {
 
   setMessage(message: string): void {
     this.message = message;
+  }
+
+  getCommand(): string {
+    return this.command;
+  }
+
+  setCommand(command: string): void {
+    this.command = command;
   }
 
   getTimestamp(): string {

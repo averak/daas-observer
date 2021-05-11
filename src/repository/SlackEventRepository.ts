@@ -44,7 +44,8 @@ export class SlackEventRepository extends AbstractRepository {
         continue;
       }
 
-      const slackEvent = new SlackEventModel(cells[i][0]);
+      const slackEvent = new SlackEventModel();
+      slackEvent.setId(cells[i][0]);
       slackEvent.setType(cells[i][1]);
       slackEvent.setChannelId(cells[i][2]);
       slackEvent.setUserId(cells[i][3]);
