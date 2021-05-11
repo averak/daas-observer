@@ -25,7 +25,7 @@ export class FetchDajareController {
     const result: FetchDajareResponse = {
       status: "OK",
       num: num,
-      dajare: dajareList,
+      dajare: dajareList.map((dajare) => dajare.getText()),
     };
 
     LogUtil.logging(`called fetchDajare API, return ${num} dajare`, "INFO");
@@ -48,7 +48,7 @@ export class FetchDajareController {
     const result: FetchRankingResponse = {
       status: "OK",
       num: num,
-      dajare: dajareList,
+      dajare: dajareList.map((dajare) => dajare.getText()),
     };
 
     LogUtil.logging(`called ranking API, return ${num} dajare`, "INFO");
