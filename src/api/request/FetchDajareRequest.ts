@@ -1,3 +1,3 @@
 export interface FetchDajareRequest {
-  num: number | undefined;
+  num: number;
 }
