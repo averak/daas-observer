@@ -1,4 +1,4 @@
-import { LogUtil } from "./util";
+import { LogUtil, DialogUtil } from "./util";
 import { SlackEventsController, FetchDajareController } from "./api";
 import { SlackEventRepository } from "./repository";
 
@@ -52,27 +52,13 @@ global.doPost = (
 
 // clear sheet button
 global.clearLog = () => {
-  // yesno dialog
-  const question: string = Browser.msgBox(
-    "ログを削除しますか？",
-    Browser.Buttons.YES_NO_CANCEL
-  );
-
-  if (question == "yes") {
+  DialogUtil.yesno("ログを削除しますか？", () => {
     LogUtil.clearAll();
-    Browser.msgBox("ログを削除しました");
-  }
+  });
 };
 global.clearEventLog = () => {
-  // yesno dialog
-  const question: string = Browser.msgBox(
-    "イベントログを削除しますか？",
-    Browser.Buttons.YES_NO_CANCEL
-  );
-
-  if (question == "yes") {
+  DialogUtil.yesno("イベントログを削除しますか？", () => {
     const slackEventRepository = new SlackEventRepository();
     slackEventRepository.clearAll();
-    Browser.msgBox("イベントログを削除しました");
-  }
+  });
 };
