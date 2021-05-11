@@ -16,9 +16,7 @@ export class SlackEventsController {
     e: GoogleAppsScript.Events.DoPost
   ): GoogleAppsScript.Content.TextOutput {
     // POST body
-    const params = JSON.parse(
-      JSON.stringify(e.postData.contents)
-    ) as SlackMessageEventRequest;
+    const params = JSON.parse(e.postData.contents) as SlackMessageEventRequest;
     // json response
     const result = ContentService.createTextOutput(params.challenge);
 
