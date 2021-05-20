@@ -31,7 +31,7 @@ export class DajareService {
 
   judgeDajare(dajare: DajareModel): boolean {
     const response = UrlFetchApp.fetch(
-      `${DAJARE_API_URL}/judge/?dajare=${dajare.getText()}`
+      `${DAJARE_API_URL}/judge?dajare=${dajare.getText()}`
     );
 
     const jsonData: judgeResponse = JSON.parse(
@@ -43,7 +43,7 @@ export class DajareService {
 
   evalDajare(dajare: DajareModel): number {
     const response = UrlFetchApp.fetch(
-      `${DAJARE_API_URL}/eval/?dajare=${dajare.getText()}`
+      `${DAJARE_API_URL}/eval?dajare=${dajare.getText()}`
     );
 
     const jsonData: evalResponse = JSON.parse(
@@ -55,7 +55,7 @@ export class DajareService {
 
   readingDajare(dajare: DajareModel): string {
     const response = UrlFetchApp.fetch(
-      `${DAJARE_API_URL}/reading/?dajare=${dajare.getText()}`
+      `${DAJARE_API_URL}/reading?dajare=${dajare.getText()}`
     );
 
     const jsonData: readingResponse = JSON.parse(
